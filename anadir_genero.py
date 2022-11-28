@@ -66,7 +66,6 @@ arch_generos.close()
 
 
 #Interfaz Grafica
-
 window = Tk() #Se crea la ventana.
 
 window.geometry("1074x710") #Se establece el alto y ancho de la ventana.
@@ -76,7 +75,7 @@ window.rowconfigure(index=0, weight=1) #para que el frame principal se expanda v
 
 main_frame = Frame(window,bg="#222831") #se define el frame donde ira el contenido
 main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=50)
-main_frame.columnconfigure(index=1,weight=1)
+main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del fram
 
 #texto
 genero_padre_txt = Label(main_frame, text="Genero Padre", bg="#222831", fg="white")
@@ -89,28 +88,30 @@ genero_txt["font"] = ("Calibri",20)
 #se definen las cajas de ingreso de texto
 entry_frame_padre = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_padre
 entry_frame_padre.columnconfigure(index=0, weight=1)    
-entry_frame_padre.grid(row=1, column=1, pady=(160,0),sticky="we")
+entry_frame_padre.grid(row=0, column=1, pady=(160,0),sticky="we")
 
 entry_frame_genero = Frame(main_frame,bd=13,bg="#3A4750") #para agregarle padding a entry_genero
 entry_frame_genero.columnconfigure(index=0, weight=1)    
-entry_frame_genero.grid(row=2, column=1, sticky="we")
+entry_frame_genero.grid(row=1, column=1, sticky="we")
 
+#entradas
 entry_padre = Entry(entry_frame_padre, bd=0, bg="#3A4750", fg="white")
 entry_padre["font"] = ("Calibri",14)
 
 entry_genero = Entry(entry_frame_genero, bd=0, bg="#3A4750", fg="white")
 entry_genero["font"] = ("Calibri",14)
 
-genero_padre_txt.grid(row=1, column=0, sticky="w",pady=(160,0),padx=(0,20))
+#se posiciona el texto y las entradas
+genero_padre_txt.grid(row=0, column=0, sticky="w",pady=(160,0),padx=(0,20))
 entry_padre.grid(row=0, column=0, sticky="nswe")
 
-genero_txt.grid(row=2, column=0, sticky="w",pady=50)
+genero_txt.grid(row=1, column=0, sticky="w",pady=50)
 entry_genero.grid(row=0, column=0, sticky="nswe")
 
 
 #botones
 buttons_frame = Frame(main_frame,bg="#222831") #frame donde iran los botones
-buttons_frame.grid(row=3, column=1, pady=30, sticky="we",padx=(30,0))
+buttons_frame.grid(row=2, column=1, pady=30, sticky="we",padx=(30,0))
 
 #Se crea el botón para cancelar
 btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #frame donde va el boton cancelar
@@ -127,4 +128,4 @@ btn_añadir["font"] = ("Calibri",13)
 btn_añadir.grid(row=0,column=1,padx=(0,0),sticky="w")
 
 
-window.mainloop() #Para que el progrma siga ejecutándose hasta cerrarlo.
+window.mainloop() #Para que el programa siga ejecutándose hasta cerrarlo.

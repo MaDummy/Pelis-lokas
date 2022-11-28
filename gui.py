@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 import tkinter.font as font
 
 root = Tk()
@@ -25,6 +26,26 @@ def main():
     
     app_frame.grid(row=0,column=0,sticky="nswe",padx=30,pady=20)
     
+    #styles
+    style = ttk.Style()
+    style.theme_use("alt")
+
+    root.option_add('*TCombobox*Listbox*Background', LIGHT_COLOR)
+    root.option_add('*TCombobox*Listbox*Foreground', "white")
+    root.option_add('*TCombobox*Listbox*selectBackground', BTN_COLOR)
+    root.option_add('*TCombobox*Listbox*selectForeground', "white")
+    root.option_add('*TCombobox*Listbox*font', ("Calibri",13))
+
+    style.map('TCombobox', fieldbackground=[('readonly', LIGHT_COLOR)])
+    style.map('TCombobox', selectbackground=[('readonly', LIGHT_COLOR)])
+    style.map('TCombobox', selectforeground=[('readonly', "white")])
+    style.map('TCombobox', background=[('readonly', LIGHT_COLOR)])
+    style.map('TCombobox', foreground=[('readonly', "white")])
+
+    layout = []
+    style.layout("TCombobox", layout)
+    
+    
     #barra de busqueda
     search_frame = Frame(app_frame,borderwidth=13,bg=LIGHT_COLOR)
     search_frame.columnconfigure(index=0,weight=1)    
@@ -37,8 +58,12 @@ def main():
     search.grid(row=0,column=0,columnspan=3,sticky="nswe")
    
     
-    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=3)
-    button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
+    combo_filt = ttk.Combobox(app_frame,text="Filtros",font=("Calibri",13),justify="center")
+    combo_filt["state"] = "readonly"
+    combo_filt.set("Filtros")
+    combo_filt["values"] = ("Titulo","Genero","Valoracion")
+    
+    combo_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
     
     #botones
     button_font = font.Font(size=12,family="Arial",weight="bold")

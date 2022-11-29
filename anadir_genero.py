@@ -1,9 +1,17 @@
 from tkinter import *
 import tkinter.font as font
 
-def borrar_texto(ventana):
-    ventana = str(ventana)
-    #canvas.delete(ventana)
+#archivo generos
+arch_generos = open('generos.csv', 'r',encoding="utf-8") #Se abre el archivo de generos una sola vez, para leerlo y generar una lista "generos"
+generos = arch_generos.readlines()    
+for genero in range(len(generos)):
+    print(generos[genero])                                                                       
+
+print(generos)
+arch_generos.close()
+
+
+
 
 def cancelar():
     '''FUNCION CANCELAR'''
@@ -54,15 +62,7 @@ def subgenero():
 
     arch_generos.close() #Cierro el archivo.
 
-def btn_clicked():
-    print("Button Clicked")
 
-arch_generos = open('generos.csv', 'r') #Se abre el archivo de generos una sola vez, para leerlo y generar una lista "generos"
-generos = arch_generos.readlines()      #con la que se trabajará durante lo que dura esta ventana.
-for genero in range(len(generos)):
-    generos[genero] = generos[genero].strip().strip().strip("ï»¿").split(';') #El strip("ï»¿") es porque tira eso en el
-                                                                              #primer indice de la lista "generos".
-arch_generos.close()
 
 
 #Interfaz Grafica

@@ -88,6 +88,17 @@ style.map("Treeview", background=[("selected", BTN_COLOR)])
 style.map("Treeview",relief=[("selected","flat")])
 
 
+def crea_lineas(archivo):
+    datos = archivo.readlines()
+    for i in range(len(datos)):
+        datos[i] = datos[i].lower()
+        datos[i] = datos[i].replace("\n","")
+        datos[i] = datos[i].replace('"', '')
+        datos[i] = datos[i].replace('\ufeff', '')
+        datos[i] = datos[i].replace(", ", ",")
+        datos[i] = datos[i].split(",")
+    return datos
+
 #main
 def main(): 
     def menu_filtros():
@@ -99,7 +110,7 @@ def main():
             filtros_estado = 0
             return
         
-        filtros_frame.grid(row=1,column=0,sticky="nswe",columnspan=4,pady=(5,0),rowspan=2)
+        filtros_frame.grid(row=1,column=0,sticky="nswe",columnspan=4,pady=(8,0),rowspan=2)
         genero_txt.grid(row=0,column=0,padx=(30,0),pady=45,sticky="w")
         combo_genero.grid(row=0,column=1,pady=45,padx=(0,30),sticky="nswe")
 
@@ -120,7 +131,7 @@ def main():
     app_frame.grid(row=0,column=0,sticky="nswe",padx=30,pady=20)
     
     #barra de busqueda
-    search_frame = Frame(app_frame,borderwidth=13,bg=LIGHT_COLOR)
+    search_frame = Frame(app_frame,borderwidth=10,bg=LIGHT_COLOR)
     search_frame.columnconfigure(index=0,weight=1)    
     search_frame.grid(row=0,column=0, columnspan=3,sticky="nswe")
     
@@ -183,13 +194,13 @@ def main():
     
     #seccion de generos - arbol de generos
     arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
-    arbol_generos.insert("", "end","General",text="General")
-    arbol_generos.insert("General","end","Accion",text="Accion")
-    arbol_generos.insert("General","end","Comedia",text="Comedia")
-    arbol_generos.insert("General","end","Romance",text="Romance")
-    arbol_generos.insert("General","end","Anime",text="Anime")
-    arbol_generos.insert("General","end","Drama",text="Drama")
-
+    archivo_generos = open("generos.csv","r",encoding="utf-8")
+    generos = crea_lineas(archivo_generos)
+    
+    arbol_generos.insert("", "end","general",text="General")
+    for genero in generos:
+        arbol_generos.insert(genero[1],"end",genero[0],text=genero[0].capitalize())
+    
     gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
     arbol_generos.grid(row=0,column=0, sticky="nswe")
     

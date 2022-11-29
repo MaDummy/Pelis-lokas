@@ -145,7 +145,9 @@ def main():
     
 
     #boton abrir filtros
-    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2, command=menu_filtros)
+    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10)
+    
+    
     button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
     button_filt["font"] = ("Calibri", 13)
 

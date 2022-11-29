@@ -66,28 +66,11 @@ def main():
         nonlocal filtros_frame
         
         if filtros_estado == 1:
-            filtros_frame.grid_forget()
+            filtros_frame.grid_remove()
             filtros_estado = 0
             return
         
         filtros_frame.grid(row=1,column=0,sticky="nswe",columnspan=4,pady=(5,0),rowspan=2)
-
-        genero_txt = Label(filtros_frame,text="Genero",fg="white",bg=LIGHT_COLOR)        
-        genero_txt["font"] = ("Calibri",15)
-
-        valoracion_txt = Label(filtros_frame,text="Valoracion",fg="white",bg=LIGHT_COLOR)
-        valoracion_txt["font"] = ("Calibri",15)
-
-        combo_genero = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
-        combo_genero["state"] = "readonly"
-        combo_genero.set("<Cualquiera>")
-        combo_genero["values"] = ("Accion","Accion","Accion")
-        
-        combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
-        combo_valoracion["state"] = "readonly"
-        combo_valoracion.set("<Cualquiera>")
-        combo_valoracion["values"] = ("1.0-1.5","1.5-2.0","2.0-2.5")
-
         genero_txt.grid(row=0,column=0,padx=(30,0),pady=45,sticky="w")
         combo_genero.grid(row=0,column=1,pady=45,padx=(0,30),sticky="nswe")
 
@@ -95,6 +78,9 @@ def main():
         combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
 
         filtros_estado = 1
+    
+    def busqueda():
+        pass
     
     #configuracion grid app
     root.columnconfigure(index=0,weight=1)
@@ -129,16 +115,32 @@ def main():
     button_gen.grid(row=2,column=2,sticky="we",padx=30)
     
 
-    #filtros
+    #boton abrir filtros
     button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2, command=menu_filtros)
     button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
     button_filt["font"] = ("Calibri", 13)
 
+    
+    #filtros
     filtros_frame = Frame(app_frame,bg=LIGHT_COLOR)
     filtros_frame.columnconfigure(index=1, weight=1)
+    
+    genero_txt = Label(filtros_frame,text="Genero",fg="white",bg=LIGHT_COLOR)        
+    genero_txt["font"] = ("Calibri",15)
+
+    valoracion_txt = Label(filtros_frame,text="Valoracion",fg="white",bg=LIGHT_COLOR)
+    valoracion_txt["font"] = ("Calibri",15)
+
+    combo_genero = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
+    combo_genero["state"] = "readonly"
+    combo_genero.set("<Cualquiera>")
+    combo_genero["values"] = ("Accion","Accion","Accion")
         
-    
-    
+    combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
+    combo_valoracion["state"] = "readonly"
+    combo_valoracion.set("<Cualquiera>")
+    combo_valoracion["values"] = ("1.0-1.5","1.5-2.0","2.0-2.5")
+
     #seccion de generos
     titulo = Label(app_frame,text="General",bg=BG_COLOR,fg=TXT_COLOR)
     titulo["font"] = ("Calibri", 32)

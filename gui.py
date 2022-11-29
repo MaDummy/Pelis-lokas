@@ -19,6 +19,7 @@ COMBO_COLOR = "#303841"
 arrow_icon = PhotoImage(file="img/arrow.png")
 filtros_icon = PhotoImage(file="img/filter.png")
 search_icon = PhotoImage(file="img/search.png")
+
 #estados
 filtros_estado = 0
 
@@ -29,6 +30,7 @@ app_frame = Frame(root, bg=BG_COLOR)
 style = ttk.Style(root)
 style.theme_use("default")
 
+#styles - combobox
 root.option_add('*TCombobox*Listbox*Background', COMBO_COLOR)
 root.option_add('*TCombobox*Listbox*Foreground', "white")
 root.option_add('*TCombobox*Listbox*selectBackground', BTN_COLOR)
@@ -43,6 +45,7 @@ style.map('TCombobox', background=[('readonly', COMBO_COLOR)])
 style.map('TCombobox', foreground=[('readonly', "white")])
 
 style.element_create('Mystyle.TCombobox.downarrow', 'image', arrow_icon)
+
 style.layout(
     'Mystyle.TCombobox', [(
         'Combobox.field', {
@@ -58,8 +61,34 @@ style.layout(
         }
     )]
 )
+
 style.configure("Mystyle.TCombobox",relief= "flat", borderwidth=0,highlightthickness=0)
 
+#styles - treeview
+style.layout('nodotbox.Treeview.Item', 
+             [('Treeitem.padding',
+               {'children': [('Treeitem.indicator', {'side': 'left', 'sticky': ''}),
+                 ('Treeitem.image', {'side': 'left', 'sticky': ''}),
+                 ('Treeitem.text', {'side': 'left', 'sticky': ''})],
+                'sticky': 'nswe'})])
+
+style.configure("Treeview",
+    background= LIGHT_COLOR,
+    foreground= "white",
+    fieldbackground= LIGHT_COLOR,
+    borderwidth = 0,
+    rowheight = 35,
+    font = ("Calibri",18),
+    relief = "flat"
+    )
+
+style.configure("Treeview.Heading", background=LIGHT_COLOR, borderwidth=0)
+style.map("Treeview.Heading", background=[("hover", "none")])
+style.map("Treeview", background=[("selected", BTN_COLOR)])
+style.map("Treeview",relief=[("selected","flat")])
+
+
+#main
 def main(): 
     def menu_filtros():
         global filtros_estado
@@ -142,24 +171,26 @@ def main():
     combo_valoracion["values"] = ("1.0-1.5","1.5-2.0","2.0-2.5")
 
     #seccion de generos
-    titulo = Label(app_frame,text="General",bg=BG_COLOR,fg=TXT_COLOR)
+    titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
     titulo["font"] = ("Calibri", 32)
     titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
 
-    
     gen_container = Frame(app_frame,bg=BG_COLOR)
-
-    for i in range(4):
-        for i2 in range(2):
-            gen_card = Button(gen_container,text="Accion",bg=LIGHT_COLOR,fg=TXT_COLOR,padx=80,pady=50,border=0)
-            gen_card["font"] = ("Calibri",17)
-            if i == 0:
-                gen_card.grid(row=i2,column=i,pady=(0,28))
-            else:
-                gen_card.grid(row=i2,column=i,padx=(28,0),pady=(0,28))
+    gen_container.columnconfigure(index=0, weight=1)
+    gen_container.rowconfigure(index=0, weight=1)
     
-    gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
+    #seccion de generos - arbol de generos
+    arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
+    arbol_generos.insert("", "end","General",text="General")
+    arbol_generos.insert("General","end","Accion",text="Accion")
+    arbol_generos.insert("General","end","Comedia",text="Comedia")
+    arbol_generos.insert("General","end","Romance",text="Romance")
+    arbol_generos.insert("General","end","Anime",text="Anime")
+    arbol_generos.insert("General","end","Drama",text="Drama")
 
+    gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
+    arbol_generos.grid(row=0,column=0, sticky="nswe")
+    
     #mainloop
     root.mainloop()
    

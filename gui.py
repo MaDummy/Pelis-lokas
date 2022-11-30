@@ -99,11 +99,24 @@ def crea_lineas(archivo):
         datos[i] = datos[i].split(",")
     return datos
 
+#styles - scrollbar
+style.configure("Vertical.TScrollbar",background=LIGHT_COLOR,arrowcolor="white")
+style.map("Vertical.TScrollbar",background=[("hover",BG_COLOR)])
+
+#scrollbar
+class AutoScrollbar(ttk.Scrollbar):
+    def set(self, low, high):
+        if float(low) <= 0.0 and float(high) >= 1.0:
+            self.tk.call("grid", "remove", self)
+        else:
+            self.grid()
+        Scrollbar.set(self, low, high)
+    
+
 #main
 def main(): 
     def menu_filtros():
         global filtros_estado
-        nonlocal filtros_frame
         
         if filtros_estado == 1:
             filtros_frame.grid_remove()
@@ -118,7 +131,7 @@ def main():
         combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
 
         filtros_estado = 1
-    
+      
     def busqueda():
         pass
     
@@ -154,15 +167,12 @@ def main():
     button_gen["font"] = button_font
     button_gen.grid(row=2,column=2,sticky="we",padx=30)
     
-
     #boton abrir filtros
     button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10)
-    
     
     button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
     button_filt["font"] = ("Calibri", 13)
 
-    
     #filtros
     filtros_frame = Frame(app_frame,bg=LIGHT_COLOR)
     filtros_frame.columnconfigure(index=1, weight=1)
@@ -188,12 +198,14 @@ def main():
     titulo["font"] = ("Calibri", 32)
     titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
 
-    gen_container = Frame(app_frame,bg=BG_COLOR)
+    gen_container = Frame(app_frame,bg=LIGHT_COLOR)
     gen_container.columnconfigure(index=0, weight=1)
     gen_container.rowconfigure(index=0, weight=1)
     
     #seccion de generos - arbol de generos
     arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
+    arbol_generos.columnconfigure(index=0, weight=1)
+    arbol_generos.rowconfigure(index=0, weight=1)
     archivo_generos = open("generos.csv","r",encoding="utf-8")
     generos = crea_lineas(archivo_generos)
     
@@ -201,8 +213,13 @@ def main():
     for genero in generos:
         arbol_generos.insert(genero[1],"end",genero[0],text=genero[0].capitalize())
     
+    #seccion de generos - scrollbar
+    arbol_scrollbar = AutoScrollbar(arbol_generos,command=arbol_generos.yview,orient="vertical")
+    arbol_generos.configure(yscrollcommand=arbol_scrollbar.set)
+    
+    arbol_scrollbar.grid(row=0,column=0,sticky="nse")
     gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
-    arbol_generos.grid(row=0,column=0, sticky="nswe")
+    arbol_generos.grid(row=0,column=0, sticky="nswe",padx=(10,0))
     
     #mainloop
     root.mainloop()

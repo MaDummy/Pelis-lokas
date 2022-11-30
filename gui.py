@@ -134,6 +134,9 @@ def main():
       
     def busqueda():
         pass
+    #archivo generos
+    archivo_generos = open("generos.csv","r",encoding="utf-8")
+    generos = crea_lineas(archivo_generos)
     
     #configuracion grid app
     root.columnconfigure(index=0,weight=1)
@@ -183,15 +186,23 @@ def main():
     valoracion_txt = Label(filtros_frame,text="Valoracion",fg="white",bg=LIGHT_COLOR)
     valoracion_txt["font"] = ("Calibri",15)
 
+    #filtros - combobox genero
     combo_genero = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_genero["state"] = "readonly"
     combo_genero.set("<Cualquiera>")
-    combo_genero["values"] = ("Accion","Accion","Accion")
+    
+    combo_values = []
+    for genero1 in generos:
+        if genero1[0] not in combo_values:
+            combo_values.append(genero1[0].capitalize())
+    
+    combo_genero["values"] = tuple(combo_values)
         
+    #filtros -combobox valoracion
     combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_valoracion["state"] = "readonly"
     combo_valoracion.set("<Cualquiera>")
-    combo_valoracion["values"] = ("1.0-1.5","1.5-2.0","2.0-2.5")
+    combo_valoracion["values"] = ("1","2","3","4","5")
 
     #seccion de generos
     titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
@@ -206,12 +217,11 @@ def main():
     arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
     arbol_generos.columnconfigure(index=0, weight=1)
     arbol_generos.rowconfigure(index=0, weight=1)
-    archivo_generos = open("generos.csv","r",encoding="utf-8")
-    generos = crea_lineas(archivo_generos)
+    
     
     arbol_generos.insert("", "end","general",text="General")
-    for genero in generos:
-        arbol_generos.insert(genero[1],"end",genero[0],text=genero[0].capitalize())
+    for genero2 in generos:
+        arbol_generos.insert(genero2[1],"end",genero2[0],text=genero2[0].capitalize())
     
     #seccion de generos - scrollbar
     arbol_scrollbar = AutoScrollbar(arbol_generos,command=arbol_generos.yview,orient="vertical")
@@ -224,5 +234,4 @@ def main():
     #mainloop
     root.mainloop()
    
-
 main()

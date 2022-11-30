@@ -1,11 +1,12 @@
-﻿Drama;General
-Romance;General
-K-Drama;Romance
-Historicos;Documental
-Documental;General
-Animales;Documental
-Animacion;General
-hooa;Documental
-gola;Documental
-hola;Documental
-Jirafa;Animales
+﻿"Drama", "General"
+"Acción", "General"
+"Romance", "General"
+"Anime", "General"
+"Documentales", "General"
+"Pelis de Guerra", "Acción"
+"Espías", "Acción"
+"Animales", "Documentales"
+"Históricos", "Documentales"
+"Romance occidental", "Romance"
+"Romance Coreano", "Romance"
+"Autos", "Acción"

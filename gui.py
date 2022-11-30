@@ -135,12 +135,20 @@ def main():
         filtros_estado = 1
       
     def busqueda():
+        global filtros_estado
+        
         home_button["state"] = "active"
         titulo.grid_remove()
         gen_container.grid_remove()
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=5,sticky="nswe")
         resultados.grid(row=4,column=0,sticky="nswe")
+
+        #cierra y renicia los filtros
+        filtros_frame.grid_remove()
+        filtros_estado = 0
+        combo_genero.set("<Cualquiera>")
+        combo_valoracion.set("<Cualquiera>")
     
     def volver_home():
         home_button["state"] = "disabled"

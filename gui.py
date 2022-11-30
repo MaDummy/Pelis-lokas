@@ -19,7 +19,7 @@ COMBO_COLOR = "#303841"
 arrow_icon = PhotoImage(file="img/arrow.png")
 filtros_icon = PhotoImage(file="img/filter.png")
 search_icon = PhotoImage(file="img/search.png")
-home_icon = PhotoImage(file="img/search.png")
+home_icon = PhotoImage(file="img/home.png")
 
 #estados
 filtros_estado = 0
@@ -135,11 +135,21 @@ def main():
         filtros_estado = 1
       
     def busqueda():
+        home_button["state"] = "active"
         titulo.grid_remove()
         gen_container.grid_remove()
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=5,sticky="nswe")
         resultados.grid(row=4,column=0,sticky="nswe")
+    
+    def volver_home():
+        home_button["state"] = "disabled"
+        titulo.grid()
+        gen_container.grid()
+        numero_resultados.grid_remove()
+        resultados_frame.grid_remove()
+        resultados.grid_remove()
+    
     
     #archivos
     archivo_generos = open("generos.csv","r",encoding="utf-8")
@@ -165,8 +175,14 @@ def main():
     search.insert(END,"Buscar pelicula")
     search.grid(row=0,column=0,columnspan=3,sticky="nswe")
    
-    search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda)
+    search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR)
     search_button.grid(row=0, column=1)
+    
+    #volver a la pantalla principal
+    home_button = Button(app_frame,image=home_icon,bg=BG_COLOR,bd=0,state="disabled",activebackground=BG_COLOR,command=volver_home)
+    home_button.grid(row=2,column=0,sticky="w")
+
+    
     
     #Añadir pelicula y genero
     button_font = font.Font(size=12,family="Arial",weight="bold")

@@ -19,6 +19,7 @@ COMBO_COLOR = "#303841"
 arrow_icon = PhotoImage(file="img/arrow.png")
 filtros_icon = PhotoImage(file="img/filter.png")
 search_icon = PhotoImage(file="img/search.png")
+home_icon = PhotoImage(file="img/search.png")
 
 #estados
 filtros_estado = 0
@@ -82,7 +83,8 @@ style.configure("Treeview",
     relief = "flat"
     )
 
-style.configure("Treeview.Heading", background=LIGHT_COLOR, borderwidth=0)
+style.configure("Treeview.Heading", background=LIGHT_COLOR, borderwidth=0,foreground="white",font=("Calibri",14))
+
 style.map("Treeview.Heading", background=[("hover", "none")])
 style.map("Treeview", background=[("selected", BTN_COLOR)])
 style.map("Treeview",relief=[("selected","flat")])
@@ -133,10 +135,17 @@ def main():
         filtros_estado = 1
       
     def busqueda():
-        pass
-    #archivo generos
+        titulo.grid_remove()
+        gen_container.grid_remove()
+        numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
+        resultados_frame.grid(row=4,column=0,columnspan=5,sticky="nswe")
+        resultados.grid(row=4,column=0,sticky="nswe")
+    
+    #archivos
     archivo_generos = open("generos.csv","r",encoding="utf-8")
+    archivo_peliculas = open("peliculas.csv","r",encoding="utf-8")
     generos = crea_lineas(archivo_generos)
+    peliculas = crea_lineas(archivo_peliculas)
     
     #configuracion grid app
     root.columnconfigure(index=0,weight=1)
@@ -156,7 +165,7 @@ def main():
     search.insert(END,"Buscar pelicula")
     search.grid(row=0,column=0,columnspan=3,sticky="nswe")
    
-    search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0)
+    search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda)
     search_button.grid(row=0, column=1)
     
     #Añadir pelicula y genero
@@ -202,7 +211,7 @@ def main():
     combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_valoracion["state"] = "readonly"
     combo_valoracion.set("<Cualquiera>")
-    combo_valoracion["values"] = ("1","2","3","4","5")
+    combo_valoracion["values"] = (1,2,3,4,5)
 
     #seccion de generos
     titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
@@ -231,6 +240,31 @@ def main():
     gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
     arbol_generos.grid(row=0,column=0, sticky="nswe",padx=(10,0))
     
+    #resultados busqueda
+    nombre_columna = ("Nombre","Director","Año","Genero","Valoracion")
+    
+    resultados_frame = Frame(app_frame,bg=BG_COLOR)
+    resultados_frame.columnconfigure(index=0,weight=1)
+    resultados_frame.rowconfigure(index=0,weight=1)
+    
+    numero_resultados = Label(app_frame,text="Se han encontrado x resultados",bg=BG_COLOR,fg="white")
+    numero_resultados["font"] = ("Calibri",16)
+
+    #resultados busqueda - tabla 
+    resultados = ttk.Treeview(resultados_frame, columns=nombre_columna, show="headings")
+    
+    resultados.heading("Nombre", text="Nombre")
+    resultados.heading("Director", text="Director")
+    resultados.heading("Año", text="Año")
+    resultados.heading("Genero", text="Genero")
+    resultados.heading("Valoracion", text="Valoracion")
+
+    resultados.insert("",END,"a")
+    
+    #resultados busqueda - scrollbar
+    resultados_scrollbar = AutoScrollbar(resultados,command=resultados.yview,orient="vertical")
+    resultados.configure(yscrollcommand=resultados_scrollbar.set)
+
     #mainloop
     root.mainloop()
    

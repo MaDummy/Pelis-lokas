@@ -11,6 +11,7 @@ root.geometry("1080x720")
 BG_COLOR = "#222831"
 LIGHT_COLOR = "#3A4750"
 BTN_COLOR = "#D72323"
+BTN_ACTIVE_COLOR = "#7c242c"
 TXT_COLOR = "#F1F6F9"
 LIGHT_TXT_COLOR = "#A9A9A9"
 COMBO_COLOR = "#303841"
@@ -166,6 +167,7 @@ def main():
         
         #activa el boton home
         home_button["state"] = "active"
+        home_button["cursor"] = "hand2"
         #elimina el arbol de generos
         titulo.grid_remove()
         gen_container.grid_remove()
@@ -198,6 +200,8 @@ def main():
         
         #desactiva el botón home
         home_button["state"] = "disabled"
+        home_button["cursor"] = "arrow"
+
         #muestra el arbol de generos
         titulo.grid()
         gen_container.grid()
@@ -232,7 +236,7 @@ def main():
     search.insert(END,"Buscar pelicula")
     search.grid(row=0,column=0,columnspan=3,sticky="nswe")
    
-    search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR)
+    search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR,cursor="hand2")
     search_button.grid(row=0, column=1)
     
     #volver a la pantalla principal
@@ -242,16 +246,16 @@ def main():
     #Añadir pelicula y genero
     button_font = font.Font(size=12,family="Arial",weight="bold")
 
-    button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0)
+    button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2")
     button_pel["font"] = button_font
     button_pel.grid(row=2,column=3,pady=(80,60),sticky="we")
     
-    button_gen = Button(app_frame, text="Añadir genero",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0)
+    button_gen = Button(app_frame, text="Añadir genero",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR,activeforeground="white",cursor="hand2")
     button_gen["font"] = button_font
     button_gen.grid(row=2,column=2,sticky="we",padx=30,pady=(80,60))
     
     #boton abrir filtros
-    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10)
+    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10,activebackground=LIGHT_COLOR,activeforeground="white",cursor="hand2")
     
     button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
     button_filt["font"] = ("Calibri", 13)

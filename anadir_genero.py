@@ -110,20 +110,22 @@ entry_genero.grid(row=0, column=0, sticky="nswe")
 
 
 #botones
+button_font = font.Font(size=13,family="Arial",weight="bold")
+
 buttons_frame = Frame(main_frame,bg="#222831") #frame donde iran los botones
 buttons_frame.grid(row=2, column=1, pady=30, sticky="we",padx=(30,0))
 
 #Se crea el botón para cancelar
 btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #frame donde va el boton cancelar
-btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15, command=cancelar)
-btn_cancelar["font"] = ("Calibri",13)
+btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15, command=cancelar,activebackground="#262C35",activeforeground="white",cursor="hand2")
+btn_cancelar["font"] = button_font
 
 btn_cancelar_frame.grid(row=0, column=0,padx=(0,60))
 btn_cancelar.grid(row=0, column=0)
 
 #Se crea el botón para añadir subgeneros
-btn_añadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgenero", fg="white", padx=70, bd=0, pady=15, command=subgenero)
-btn_añadir["font"] = ("Calibri",13)
+btn_añadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgenero", fg="white", padx=70, bd=0, pady=15, command=subgenero,activebackground="#7c242c",activeforeground="white",cursor="hand2")
+btn_añadir["font"] = button_font
 
 btn_añadir.grid(row=0,column=1,padx=(0,0),sticky="w")
 

@@ -1,16 +1,27 @@
 from tkinter import *
 from tkinter import ttk
 import tkinter.font as font
+from crea_lista import crea_lista
+from anadir_genero import anadir_genero
+from anadir_pelicula import anadir_pelicula
 
 root = Tk()
 root.update()
 root.configure(bg="#222831")
 root.geometry("1080x720")
 
+#archivos
+archivo_generos = open("generos.csv","r",encoding="utf-8")
+archivo_peliculas = open("peliculas.csv","r",encoding="utf-8")
+generos = crea_lista(archivo_generos)
+peliculas = crea_lista(archivo_peliculas)
+
+
 #variables globales
 BG_COLOR = "#222831"
 LIGHT_COLOR = "#3A4750"
 BTN_COLOR = "#D72323"
+BTN_HOVER_COLOR = "#e63434"
 BTN_ACTIVE_COLOR = "#7c242c"
 TXT_COLOR = "#F1F6F9"
 LIGHT_TXT_COLOR = "#A9A9A9"
@@ -103,20 +114,11 @@ class AutoScrollbar(ttk.Scrollbar):
         Scrollbar.set(self, low, high)
 
 #funciones
-def crea_lineas(archivo):
-    datos = archivo.readlines()
-    for i in range(len(datos)):
-        datos[i] = datos[i].lower()
-        datos[i] = datos[i].replace("\n","")
-        datos[i] = datos[i].replace('"', '')
-        datos[i] = datos[i].replace('\ufeff', '')
-        datos[i] = datos[i].replace(", ", ",")
-        datos[i] = datos[i].split(",")
-    return datos
 
 #funcion principal
 def main(): 
-    #funcion encargada de abrir y cerra el menú de filtros
+    #funcion encargada de abrir y cerrar el menú de filtros
+
     def menu_filtros():
         global filtros_estado
         
@@ -137,6 +139,7 @@ def main():
         #cambia su estado a 1 (abierto)
         filtros_estado = 1
       
+    #reinicia los filtros y esconde el menu de filtros
     def limpia_filtros():
         global filtros_estado
         filtros_frame.grid_remove()
@@ -149,7 +152,7 @@ def main():
         global filtros_estado
         
         #limpia resultados anteriores
-        resultados.delete(*resultados.get_children())
+        limpia_resultados()
         
         #modifica el estilo de Treeview
         style.configure("Treeview", 
@@ -161,16 +164,16 @@ def main():
         
         style.configure("Treeview.Heading",borderwidth=0,font=("Calibri",16))
 
-        #inserta los resultados en la tabla
-        for pelicula in peliculas:
-            resultados.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),pelicula[3],pelicula[4] + "/5"))
-        
         #activa el boton home
         home_button["state"] = "active"
         home_button["cursor"] = "hand2"
         #elimina el arbol de generos
         titulo.grid_remove()
         gen_container.grid_remove()
+        
+        #inserta los resultados en la tabla
+        for pelicula in peliculas:
+            resultados.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),pelicula[3],pelicula[4] + "/5"))
         #muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
@@ -181,7 +184,7 @@ def main():
     
     def limpia_resultados():
         resultados.delete(*resultados.get_children())
-    
+            
     #funcion que permite al usuario volver al menú principal
     def volver_home():
         #modifica el estilo del arbol de generos
@@ -212,12 +215,65 @@ def main():
         #limpia los resultados
         limpia_resultados()
     
-    #archivos
-    archivo_generos = open("generos.csv","r",encoding="utf-8")
-    archivo_peliculas = open("peliculas.csv","r",encoding="utf-8")
-    generos = crea_lineas(archivo_generos)
-    peliculas = crea_lineas(archivo_peliculas)
+    def llena_arbol():
+        arbol_generos.insert("", "end","general",text="General")
+        for genero in generos:
+            arbol_generos.insert(genero[1].lower(),"end",genero[0].lower(),text=genero[0].capitalize())
     
+    def llena_combo():
+        combo_values = []
+        for genero1 in generos:
+            if genero1[0] not in combo_values:
+                combo_values.append(genero1[0].capitalize())
+        combo_genero["values"] = tuple(combo_values)
+    
+    
+    def actualiza_generos():
+        global generos
+        
+        #se define la nueva pantalla
+        gen_window = Toplevel(root)
+        #llama a la funcion anadir_genero, que crea la nueva ventana
+        anadir_genero(gen_window)
+        
+        #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
+        gen_window.grab_set()
+        root.wait_window(gen_window)
+        
+        #lee nuevamente el archivo de generos y crea una lista con los generos
+        archivo_generos.seek(0)
+        generos = crea_lista(archivo_generos)
+        #reinicia el arbol de generos y el combobox
+        arbol_generos.delete(*arbol_generos.get_children())
+        llena_arbol()
+        combo_genero.delete(0,END)
+        llena_combo()
+    
+    def actualiza_peliculas():
+        anadir_pelicula()
+    
+    #funciones evento - hover
+
+    #cuando el mouse pasa por encima del boton, cambia su color
+    def encima(e):
+        e.widget['background'] = BTN_HOVER_COLOR
+
+    #cuando el mouse se va del boton, vuelve a su color original
+    def fuera(e):
+        e.widget['background'] = BTN_COLOR
+    
+    #funciones evento - focus
+
+    def focus_in(e):
+        search["fg"] = "white"
+        if e.widget.get() == "Buscar pelicula":
+            search.delete(0,END)
+    
+    def focus_out(e):
+        if e.widget.get() == "":
+            search["fg"] = LIGHT_TXT_COLOR
+            search.insert(END,"Buscar pelicula")
+       
     #configuracion grid app_frame
     root.columnconfigure(index=0,weight=1)
     root.rowconfigure(index=0,weight=1)
@@ -246,11 +302,11 @@ def main():
     #Añadir pelicula y genero
     button_font = font.Font(size=12,family="Arial",weight="bold")
 
-    button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2")
+    button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2",command=actualiza_peliculas)
     button_pel["font"] = button_font
     button_pel.grid(row=2,column=3,pady=(80,60),sticky="we")
     
-    button_gen = Button(app_frame, text="Añadir genero",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR,activeforeground="white",cursor="hand2")
+    button_gen = Button(app_frame, text="Añadir genero",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR,activeforeground="white",cursor="hand2",command=actualiza_generos)
     button_gen["font"] = button_font
     button_gen.grid(row=2,column=2,sticky="we",padx=30,pady=(80,60))
     
@@ -274,21 +330,15 @@ def main():
     combo_genero = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_genero["state"] = "readonly"
     combo_genero.set("<Cualquiera>")
+    llena_combo() #llena el combobox con los generos
     
-    combo_values = []
-    for genero1 in generos:
-        if genero1[0] not in combo_values:
-            combo_values.append(genero1[0].capitalize())
-    
-    combo_genero["values"] = tuple(combo_values)
-        
     #menu filtros -combobox valoracion
     combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_valoracion["state"] = "readonly"
     combo_valoracion.set("<Cualquiera>")
     combo_valoracion["values"] = (1,2,3,4,5)
 
-    #seccion de generos
+    #seccion de generos - titulo y contenedor
     titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
     titulo["font"] = ("Calibri", 32)
     titulo.grid(row=3,column=0,sticky="w",pady=(0,20))
@@ -303,10 +353,7 @@ def main():
     arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
     arbol_generos.columnconfigure(index=0, weight=1)
     arbol_generos.rowconfigure(index=0, weight=1)
-
-    arbol_generos.insert("", "end","general",text="General")
-    for genero2 in generos:
-        arbol_generos.insert(genero2[1],"end",genero2[0],text=genero2[0].capitalize())
+    llena_arbol() #llena el arbol con los generos
     
     #seccion de generos - scrollbar
     arbol_scrollbar = AutoScrollbar(arbol_generos,command=arbol_generos.yview,orient="vertical")
@@ -346,6 +393,17 @@ def main():
     resultados_scrollbar = AutoScrollbar(resultados,command=resultados.yview,orient="vertical")
     resultados.configure(yscrollcommand=resultados_scrollbar.set)
     resultados_scrollbar.grid(row=0,column=0,sticky="nse")
+
+    #eventos
+    button_gen.bind("<Enter>",encima)
+    button_gen.bind("<Leave>",fuera)
+    
+    button_pel.bind("<Enter>",encima)
+    button_pel.bind("<Leave>",fuera)
+    
+    search.bind("<FocusIn>",focus_in)
+    search.bind("<FocusOut>",focus_out)
+
 
     #mainloop
     root.mainloop()

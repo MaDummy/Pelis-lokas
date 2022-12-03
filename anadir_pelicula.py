@@ -2,16 +2,15 @@ from tkinter import *
 import tkinter.font as font
 
 
-def anadir_pelicula():
+def anadir_pelicula(pel_window):
     #Interfaz Grafica
-    window = Tk() #Se crea la ventana.
 
-    window.geometry("1074x710") #Se establece el alto y ancho de la ventana.
-    window.configure(bg ="#222831") #El color del fondo
-    window.columnconfigure(index=0, weight=1) #para que el frame principal se expanda horizontalmente
-    window.rowconfigure(index=0, weight=1) #para que el frame principal se expanda verticalmente
+    pel_window.geometry("1074x710") #Se establece el alto y ancho de la ventana.
+    pel_window.configure(bg ="#222831") #El color del fondo
+    pel_window.columnconfigure(index=0, weight=1) #para que el frame principal se expanda horizontalmente
+    pel_window.rowconfigure(index=0, weight=1) #para que el frame principal se expanda verticalmente
 
-    main_frame = Frame(window,bg="#222831") #se define el frame donde ira el contenido
+    main_frame = Frame(pel_window,bg="#222831") #se define el frame donde ira el contenido
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=50)
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
 
@@ -103,4 +102,3 @@ def anadir_pelicula():
     btn_añadir["font"] = button_font
 
     btn_añadir.grid(row=0,column=1,padx=(0,0),sticky="w")
-    window.mainloop() #Para que el programa siga ejecutándose hasta cerrarlo.

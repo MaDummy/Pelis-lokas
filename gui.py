@@ -16,7 +16,6 @@ archivo_peliculas = open("peliculas.csv","r",encoding="utf-8")
 generos = crea_lista(archivo_generos)
 peliculas = crea_lista(archivo_peliculas)
 
-
 #variables globales
 BG_COLOR = "#222831"
 LIGHT_COLOR = "#3A4750"
@@ -36,8 +35,7 @@ home_icon = PhotoImage(file="img/home.png")
 #estados
 filtros_estado = 0
 
-#frame principal 
-app_frame = Frame(root, bg=BG_COLOR)
+
 
 #styles
 style = ttk.Style(root)
@@ -118,32 +116,31 @@ class AutoScrollbar(ttk.Scrollbar):
 #funcion principal
 def main(): 
     #funcion encargada de abrir y cerrar el menú de filtros
-
     def menu_filtros():
         global filtros_estado
         
         #si el menu está abierto, se cierra y cambia su estado a 0 (cerrado)
         if filtros_estado == 1:
-            filtros_frame.grid_remove()
-            filtros_estado = 0
+            cierra_filtros()
             return
-        
+        abre_filtros()
+
+    
+    def abre_filtros():
+        global filtros_estado
         #abre el menu
         filtros_frame.grid(row=1,column=0,sticky="nswe",columnspan=4,pady=(8,0),rowspan=2)
-        genero_txt.grid(row=0,column=0,padx=(30,0),pady=45,sticky="w")
-        combo_genero.grid(row=0,column=1,pady=45,padx=(0,30),sticky="nswe")
-
-        valoracion_txt.grid(row=1,column=0, sticky="w",padx=(30,20))
-        combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
-
         #cambia su estado a 1 (abierto)
         filtros_estado = 1
-      
-    #reinicia los filtros y esconde el menu de filtros
-    def limpia_filtros():
+    
+    def cierra_filtros():
         global filtros_estado
+        #cierra el menu
         filtros_frame.grid_remove()
+        #cambia su estado a 0 (cerrado)
         filtros_estado = 0
+    
+    def limpia_filtros():
         combo_genero.set("<Cualquiera>")
         combo_valoracion.set("<Cualquiera>")
     
@@ -171,16 +168,20 @@ def main():
         titulo.grid_remove()
         gen_container.grid_remove()
         
+        #numero resultados
+        numero_resultados["text"] = f"Se han encontrado {len(peliculas)} resultados"
+        
         #inserta los resultados en la tabla
         for pelicula in peliculas:
             resultados.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),pelicula[3],pelicula[4] + "/5"))
+        
         #muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
-        resultados.grid(row=0,column=0,sticky="nswe")
         
-        #cierra y limpia los filtros
-        limpia_filtros()
+        
+        #cierra los filtros
+        cierra_filtros()
     
     def limpia_resultados():
         resultados.delete(*resultados.get_children())
@@ -214,6 +215,8 @@ def main():
         resultados.grid_remove()
         #limpia los resultados
         limpia_resultados()
+        #limpia los filtros
+        limpia_filtros()
     
     def llena_arbol():
         arbol_generos.insert("", "end","general",text="General")
@@ -240,7 +243,7 @@ def main():
         gen_window.grab_set()
         root.wait_window(gen_window)
         
-        #lee nuevamente el archivo de generos y crea una lista con los generos
+        #cuando se cierra la ventana, lee nuevamente el archivo de generos y crea una lista con los generos
         archivo_generos.seek(0)
         generos = crea_lista(archivo_generos)
         #reinicia el arbol de generos y el combobox
@@ -250,20 +253,29 @@ def main():
         llena_combo()
     
     def actualiza_peliculas():
-        anadir_pelicula()
-    
-    #funciones evento - hover
+        global peliculas
+        
+        #se define la nueva pantalla
+        pel_window = Toplevel(root)
+        #llama a la funcion anadir_genero, que crea la nueva ventana
+        anadir_pelicula(pel_window)
+        
+        #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
+        pel_window.grab_set()
+        root.wait_window(pel_window)
+        
+        #cuando se cierra la ventana, lee nuevamente el archivo de peliculas y crea una lista con las peliculas
+        archivo_peliculas.seek(0)
+        peliculas = crea_lista(archivo_peliculas)
 
-    #cuando el mouse pasa por encima del boton, cambia su color
-    def encima(e):
+    #funciones evento - hover
+    def enter(e):
         e.widget['background'] = BTN_HOVER_COLOR
 
-    #cuando el mouse se va del boton, vuelve a su color original
-    def fuera(e):
+    def leave(e):
         e.widget['background'] = BTN_COLOR
     
     #funciones evento - focus
-
     def focus_in(e):
         search["fg"] = "white"
         if e.widget.get() == "Buscar pelicula":
@@ -274,7 +286,10 @@ def main():
             search["fg"] = LIGHT_TXT_COLOR
             search.insert(END,"Buscar pelicula")
        
-    #configuracion grid app_frame
+    
+    #frame principal
+    app_frame = Frame(root, bg=BG_COLOR)
+    
     root.columnconfigure(index=0,weight=1)
     root.rowconfigure(index=0,weight=1)
     app_frame.columnconfigure(index=0,weight=1)
@@ -282,24 +297,28 @@ def main():
     
     app_frame.grid(row=0,column=0,sticky="nswe",padx=30,pady=20)
     
+    
     #barra de busqueda
     search_frame = Frame(app_frame,borderwidth=10,bg=LIGHT_COLOR)
     search_frame.columnconfigure(index=0,weight=1)    
-    search_frame.grid(row=0,column=0, columnspan=3,sticky="nswe")
-    
+
     search = Entry(search_frame,bg=LIGHT_COLOR,bd=0,fg=LIGHT_TXT_COLOR)
     search["font"] = ("Calibri",13)
     search.insert(END,"Buscar pelicula")
-    search.grid(row=0,column=0,columnspan=3,sticky="nswe")
-   
+    
     search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR,cursor="hand2")
+    
+    #barra de busqueda - posicionamiento
+    search_frame.grid(row=0,column=0, columnspan=3,sticky="nswe")
+    search.grid(row=0,column=0,columnspan=3,sticky="nswe")
     search_button.grid(row=0, column=1)
     
-    #volver a la pantalla principal
+    
+    #botones - home
     home_button = Button(app_frame,image=home_icon,bg=BG_COLOR,bd=0,state="disabled",activebackground=BG_COLOR,command=volver_home)
     home_button.grid(row=2,column=0,sticky="w")
 
-    #Añadir pelicula y genero
+    #botones - añadir pelicula y genero
     button_font = font.Font(size=12,family="Arial",weight="bold")
 
     button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2",command=actualiza_peliculas)
@@ -310,13 +329,12 @@ def main():
     button_gen["font"] = button_font
     button_gen.grid(row=2,column=2,sticky="we",padx=30,pady=(80,60))
     
-    #boton abrir filtros
-    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10,activebackground=LIGHT_COLOR,activeforeground="white",cursor="hand2")
     
-    button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
+    #filtros - boton
+    button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10,activebackground=LIGHT_COLOR,activeforeground="white",cursor="hand2")
     button_filt["font"] = ("Calibri", 13)
-
-    #menu filtros
+     
+    #filtros - menu
     filtros_frame = Frame(app_frame,bg=LIGHT_COLOR)
     filtros_frame.columnconfigure(index=1, weight=1)
     
@@ -326,29 +344,34 @@ def main():
     valoracion_txt = Label(filtros_frame,text="Valoracion",fg="white",bg=LIGHT_COLOR)
     valoracion_txt["font"] = ("Calibri",15)
 
-    #menu filtros - combobox genero
+    #filtros - combobox genero
     combo_genero = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_genero["state"] = "readonly"
     combo_genero.set("<Cualquiera>")
     llena_combo() #llena el combobox con los generos
     
-    #menu filtros -combobox valoracion
+    #filtros -combobox valoracion
     combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_valoracion["state"] = "readonly"
     combo_valoracion.set("<Cualquiera>")
     combo_valoracion["values"] = (1,2,3,4,5)
 
+    #filtros - posicionamiento
+    button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
+    genero_txt.grid(row=0,column=0,padx=(30,0),pady=45,sticky="w")
+    combo_genero.grid(row=0,column=1,pady=45,padx=(0,30),sticky="nswe")
+    valoracion_txt.grid(row=1,column=0, sticky="w",padx=(30,20))
+    combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
+    
+    
     #seccion de generos - titulo y contenedor
     titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
     titulo["font"] = ("Calibri", 32)
-    titulo.grid(row=3,column=0,sticky="w",pady=(0,20))
-
+    
     gen_container = Frame(app_frame,bg=LIGHT_COLOR)
     gen_container.columnconfigure(index=0, weight=1)
     gen_container.rowconfigure(index=0, weight=1)
     
-    gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
-
     #seccion de generos - arbol de generos
     arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
     arbol_generos.columnconfigure(index=0, weight=1)
@@ -359,20 +382,24 @@ def main():
     arbol_scrollbar = AutoScrollbar(arbol_generos,command=arbol_generos.yview,orient="vertical")
     arbol_generos.configure(yscrollcommand=arbol_scrollbar.set)
     
+    #seccion de generos - posicionamiento
+    titulo.grid(row=3,column=0,sticky="w",pady=(0,20))
+    gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
     arbol_scrollbar.grid(row=0,column=0,sticky="nse")
     arbol_generos.grid(row=0,column=0, sticky="nswe",padx=(10,0))
     
-    #resultados busqueda
-    resultados_columnas = ("Nombre","Director","Genero","Año","Valoracion")
-    
+
+    #resultados busqueda - frame y texto
     resultados_frame = Frame(app_frame,bg=BG_COLOR)
     resultados_frame.columnconfigure(index=0,weight=1)
     resultados_frame.rowconfigure(index=0,weight=1)
     
-    numero_resultados = Label(app_frame,text=f"Se han encontrado {len(peliculas)} resultados",bg=BG_COLOR,fg="white")
+    numero_resultados = Label(app_frame,bg=BG_COLOR,fg="white")
     numero_resultados["font"] = ("Calibri",16)
 
     #resultados busqueda - tabla 
+    resultados_columnas = ("Nombre","Director","Genero","Año","Valoracion")
+    
     resultados = ttk.Treeview(resultados_frame, columns=resultados_columnas, show="headings")
     resultados.columnconfigure(index=0,weight=1)
     resultados.rowconfigure(index=0,weight=1)
@@ -392,18 +419,21 @@ def main():
     #resultados busqueda - scrollbar
     resultados_scrollbar = AutoScrollbar(resultados,command=resultados.yview,orient="vertical")
     resultados.configure(yscrollcommand=resultados_scrollbar.set)
+    
+    #resultados busqueda - posicionamiento
+    resultados.grid(row=0,column=0,sticky="nswe")
     resultados_scrollbar.grid(row=0,column=0,sticky="nse")
+    
 
     #eventos
-    button_gen.bind("<Enter>",encima)
-    button_gen.bind("<Leave>",fuera)
+    button_gen.bind("<Enter>",enter)
+    button_gen.bind("<Leave>",leave)
     
-    button_pel.bind("<Enter>",encima)
-    button_pel.bind("<Leave>",fuera)
+    button_pel.bind("<Enter>",enter)
+    button_pel.bind("<Leave>",leave)
     
     search.bind("<FocusIn>",focus_in)
     search.bind("<FocusOut>",focus_out)
-
 
     #mainloop
     root.mainloop()

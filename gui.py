@@ -16,7 +16,7 @@ archivo_peliculas = open("peliculas.csv","r",encoding="utf-8")
 generos = crea_lista(archivo_generos)
 peliculas = crea_lista(archivo_peliculas)
 
-#variables globales
+#colores
 BG_COLOR = "#222831"
 LIGHT_COLOR = "#3A4750"
 BTN_COLOR = "#D72323"
@@ -31,11 +31,10 @@ arrow_icon = PhotoImage(file="img/arrow.png")
 filtros_icon = PhotoImage(file="img/filter.png")
 search_icon = PhotoImage(file="img/search.png")
 home_icon = PhotoImage(file="img/home.png")
-
+movie_icon = PhotoImage(file="img/movie.png")
+genre_icon = PhotoImage(file="img/genre.png")
 #estados
 filtros_estado = 0
-
-
 
 #styles
 style = ttk.Style(root)
@@ -115,7 +114,7 @@ class AutoScrollbar(ttk.Scrollbar):
 
 #funcion principal
 def main(): 
-    #funcion encargada de abrir y cerrar el menú de filtros
+    #funciones encargadas de abrir y cerrar el menú de filtros
     def menu_filtros():
         global filtros_estado
         
@@ -125,7 +124,6 @@ def main():
             return
         abre_filtros()
 
-    
     def abre_filtros():
         global filtros_estado
         #abre el menu
@@ -140,9 +138,68 @@ def main():
         #cambia su estado a 0 (cerrado)
         filtros_estado = 0
     
-    def limpia_filtros():
-        combo_genero.set("<Cualquiera>")
-        combo_valoracion.set("<Cualquiera>")
+    #funciones encargadas de desplegar el arbol de generos y la tabla de peliculas
+
+    def despliega_generos():
+        #modifica el estilo del arbol de generos
+        style.configure("Treeview", 
+            font=("Calibri",17),
+            background=LIGHT_COLOR,
+            rowheight=35,
+            fieldbackground=LIGHT_COLOR,
+            borderwidth=0,
+            )
+        
+        style.configure("Treeview.Heading",
+            borderwidth=0,
+            font=("Calibri",13)
+        )
+
+        arbol_generos_btn.grid_remove()
+        peliculas_titulo.grid_remove()
+        peliculas_frame.grid_remove()
+
+        lista_peliculas_btn.grid(row=3,column=3,sticky="e",pady=(0,30))
+        generos_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
+        generos_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
+        
+    
+    def despliega_peliculas():
+        #modifica el estilo de la tabla de peliculas
+        style.configure("Treeview", 
+            font=("Calibri",14),
+            background="#283039",
+            rowheight=40,
+            fieldbackground="#283039",
+            )
+        
+        style.configure("Treeview.Heading",borderwidth=0,font=("Calibri",16))
+
+        generos_titulo.grid_remove()
+        generos_frame.grid_remove()
+        lista_peliculas_btn.grid_remove()
+
+        arbol_generos_btn.grid(row=3,column=3,sticky="e",pady=(0,30))         
+        peliculas_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
+        peliculas_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
+         
+    #funciones encargadas de llenar las distintas tablas del programa
+    def llena_peliculas():
+        for pelicula in peliculas:
+            tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),pelicula[3],pelicula[4] + "/5"))
+    
+    def llena_arbol():
+        arbol_generos.insert("", "end","general",text="General")
+        for genero in generos:
+            arbol_generos.insert(genero[1].lower(),"end",genero[0].lower(),text=genero[0].capitalize())
+    
+    def llena_combo():
+        combo_values = []
+        for genero1 in generos:
+            if genero1[0] not in combo_values:
+                combo_values.append(genero1[0].capitalize())
+        combo_genero["values"] = tuple(combo_values)
+    
     
     #funcion de busqueda de peliculas
     def busqueda():
@@ -151,7 +208,7 @@ def main():
         #limpia resultados anteriores
         limpia_resultados()
         
-        #modifica el estilo de Treeview
+        #modifica el estilo de la tabla de resultados
         style.configure("Treeview", 
             font=("Calibri",14),
             background="#283039",
@@ -164,9 +221,16 @@ def main():
         #activa el boton home
         home_button["state"] = "active"
         home_button["cursor"] = "hand2"
-        #elimina el arbol de generos
-        titulo.grid_remove()
-        gen_container.grid_remove()
+        
+        #elimina boton para cambiar entre peliculas y generos
+        lista_peliculas_btn.grid_remove()
+        arbol_generos_btn.grid_remove()
+        
+        #elimina el arbol de generos o tabla de peliculas
+        peliculas_titulo.grid_remove()
+        peliculas_frame.grid_remove()
+        generos_titulo.grid_remove()
+        generos_frame.grid_remove()
         
         #numero resultados
         numero_resultados["text"] = f"Se han encontrado {len(peliculas)} resultados"
@@ -179,9 +243,13 @@ def main():
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
         
-        
         #cierra los filtros
         cierra_filtros()
+    
+    #funciones de limpieza
+    def limpia_filtros():
+        combo_genero.set("<Cualquiera>")
+        combo_valoracion.set("<Cualquiera>")
     
     def limpia_resultados():
         resultados.delete(*resultados.get_children())
@@ -206,31 +274,22 @@ def main():
         home_button["state"] = "disabled"
         home_button["cursor"] = "arrow"
 
+        #mustra el boton para cambiar a peliculas
+        lista_peliculas_btn.grid()
+        
         #muestra el arbol de generos
-        titulo.grid()
-        gen_container.grid()
+        generos_titulo.grid()
+        generos_frame.grid()
         #elimina tabla de resultados
         numero_resultados.grid_remove()
         resultados_frame.grid_remove()
-        resultados.grid_remove()
         #limpia los resultados
         limpia_resultados()
         #limpia los filtros
         limpia_filtros()
     
-    def llena_arbol():
-        arbol_generos.insert("", "end","general",text="General")
-        for genero in generos:
-            arbol_generos.insert(genero[1].lower(),"end",genero[0].lower(),text=genero[0].capitalize())
     
-    def llena_combo():
-        combo_values = []
-        for genero1 in generos:
-            if genero1[0] not in combo_values:
-                combo_values.append(genero1[0].capitalize())
-        combo_genero["values"] = tuple(combo_values)
-    
-    
+    #funciones de actualizacion (al añadir peliculas y añadir generos)
     def actualiza_generos():
         global generos
         
@@ -267,6 +326,9 @@ def main():
         #cuando se cierra la ventana, lee nuevamente el archivo de peliculas y crea una lista con las peliculas
         archivo_peliculas.seek(0)
         peliculas = crea_lista(archivo_peliculas)
+        #reinicia la tabla de peliculas
+        tabla_peliculas.delete(*tabla_peliculas.get_children())
+        llena_peliculas()
 
     #funciones evento - hover
     def enter(e):
@@ -364,16 +426,19 @@ def main():
     combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
     
     
-    #seccion de generos - titulo y contenedor
-    titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
-    titulo["font"] = ("Calibri", 32)
+    #seccion de generos - boton
+    arbol_generos_btn = Button(app_frame,image=genre_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_generos)
     
-    gen_container = Frame(app_frame,bg=LIGHT_COLOR)
-    gen_container.columnconfigure(index=0, weight=1)
-    gen_container.rowconfigure(index=0, weight=1)
+    #seccion de generos - titulo y contenedor
+    generos_titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
+    generos_titulo["font"] = ("Calibri", 32)
+    
+    generos_frame = Frame(app_frame,bg=LIGHT_COLOR)
+    generos_frame.columnconfigure(index=0, weight=1)
+    generos_frame.rowconfigure(index=0, weight=1)
     
     #seccion de generos - arbol de generos
-    arbol_generos = ttk.Treeview(gen_container,style="nodotbox.Treeview")
+    arbol_generos = ttk.Treeview(generos_frame,style="nodotbox.Treeview")
     arbol_generos.columnconfigure(index=0, weight=1)
     arbol_generos.rowconfigure(index=0, weight=1)
     llena_arbol() #llena el arbol con los generos
@@ -383,12 +448,52 @@ def main():
     arbol_generos.configure(yscrollcommand=arbol_scrollbar.set)
     
     #seccion de generos - posicionamiento
-    titulo.grid(row=3,column=0,sticky="w",pady=(0,20))
-    gen_container.grid(row=4,column=0,columnspan=4,sticky="nswe")
+    generos_titulo.grid(row=3,column=0,sticky="w",pady=(0,20))
+    generos_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
     arbol_scrollbar.grid(row=0,column=0,sticky="nse")
     arbol_generos.grid(row=0,column=0, sticky="nswe",padx=(10,0))
     
+    
+    #seccion de peliculas - boton
+    lista_peliculas_btn = Button(app_frame,image=movie_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_peliculas)
+    lista_peliculas_btn.grid(row=3,column=3,sticky="e",pady=(0,30))
+    
+    #seccion de peliculas - frame y texto
+    peliculas_titulo = Label(app_frame,text="Peliculas",bg=BG_COLOR,fg=TXT_COLOR,font=("Calibri",32))
+    peliculas_frame = Frame(app_frame,bg=BG_COLOR)
+    peliculas_frame.columnconfigure(index=0,weight=1)
+    peliculas_frame.rowconfigure(index=0,weight=1)
+    
+    #seccion de peliculas - tabla
+    tabla_columnas = ("Nombre","Director","Genero","Año","Valoracion")
+    
+    tabla_peliculas = ttk.Treeview(peliculas_frame, columns=tabla_columnas, show="headings")
+    tabla_peliculas.columnconfigure(index=0,weight=1)
+    tabla_peliculas.rowconfigure(index=0,weight=1)
+    
+    tabla_peliculas.column("Nombre", anchor="w",minwidth=275)
+    tabla_peliculas.column("Director", anchor="w")
+    tabla_peliculas.column("Año", anchor="center",width=80)
+    tabla_peliculas.column("Genero", anchor="w")
+    tabla_peliculas.column("Valoracion", anchor="center",width=150)
 
+    tabla_peliculas.heading("Nombre", text="Nombre",anchor="w")
+    tabla_peliculas.heading("Director", text="Director",anchor="w")
+    tabla_peliculas.heading("Año", text="Año",anchor="center")
+    tabla_peliculas.heading("Genero", text="Genero",anchor="w")
+    tabla_peliculas.heading("Valoracion", text="Valoracion",anchor="center")
+    
+    llena_peliculas() #llena la tabla de peliculas con las peliculas
+    
+    #seccion de peliculas - scrollbar
+    tabla_peliculas_scrollbar = AutoScrollbar(tabla_peliculas,command=tabla_peliculas.yview,orient="vertical")
+    tabla_peliculas.configure(yscrollcommand=tabla_peliculas_scrollbar.set)
+    
+    #seccion de peliculas - posicionamiento
+    tabla_peliculas.grid(row=0,column=0,sticky="nswe")
+    tabla_peliculas_scrollbar.grid(row=0,column=0,sticky="nse")
+    
+    
     #resultados busqueda - frame y texto
     resultados_frame = Frame(app_frame,bg=BG_COLOR)
     resultados_frame.columnconfigure(index=0,weight=1)
@@ -398,9 +503,7 @@ def main():
     numero_resultados["font"] = ("Calibri",16)
 
     #resultados busqueda - tabla 
-    resultados_columnas = ("Nombre","Director","Genero","Año","Valoracion")
-    
-    resultados = ttk.Treeview(resultados_frame, columns=resultados_columnas, show="headings")
+    resultados = ttk.Treeview(resultados_frame, columns=tabla_columnas, show="headings")
     resultados.columnconfigure(index=0,weight=1)
     resultados.rowconfigure(index=0,weight=1)
     

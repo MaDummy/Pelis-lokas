@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter.font as font
 from crea_lista import crea_lista
 
-def anadir_genero(gen_window):
+def anadir_genero(gen_window,enter,leave):
     
     #archivo generos
     arch_generos = open('generos.csv', 'r',encoding="utf-8") #Se abre el archivo de generos una sola vez, para leerlo y generar una lista "generos"
@@ -119,7 +119,11 @@ def anadir_genero(gen_window):
     btn_cancelar.grid(row=0, column=0)
 
     #Se crea el botón para añadir subgeneros
-    btn_añadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgenero", fg="white", padx=70, bd=0, pady=15, command=subgenero,activebackground="#7c242c",activeforeground="white",cursor="hand2")
-    btn_añadir["font"] = button_font
+    btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgenero", fg="white", padx=70, bd=0, pady=15, command=subgenero,activebackground="#7c242c",activeforeground="white",cursor="hand2")
+    btn_anadir["font"] = button_font
 
-    btn_añadir.grid(row=0,column=1,padx=(0,0),sticky="w")
+    btn_anadir.grid(row=0,column=1,padx=(0,0),sticky="w")
+
+    #eventos
+    btn_anadir.bind("<Enter>",enter)
+    btn_anadir.bind("<Leave>",leave)

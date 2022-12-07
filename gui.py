@@ -232,12 +232,32 @@ def main():
         generos_titulo.grid_remove()
         generos_frame.grid_remove()
         
+        #resultados 
+        lista_resultados = []
+        valoracion = combo_valoracion.get()
+        genero = combo_genero.get()
+        nombre = search.get()
+        
+        if nombre == "Buscar pelicula":
+            nombre = ""
+        
+        if genero == "<Cualquiera>" and valoracion != "<Cualquiera>":
+            for pelicula in peliculas:
+                if pelicula[4] == valoracion:
+                    lista_resultados.append(pelicula)
+        
+        if genero == "<Cualquiera>" and valoracion == "<Cualquiera>":
+            for pelicula in peliculas:
+                if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
+                   lista_resultados.append(pelicula)
+        
+        
         #numero resultados
-        numero_resultados["text"] = f"Se han encontrado {len(peliculas)} resultados"
+        numero_resultados["text"] = f"Se han encontrado {len(lista_resultados)} resultados"
         
         #inserta los resultados en la tabla
-        for pelicula in peliculas:
-            resultados.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),pelicula[3],pelicula[4] + "/5"))
+        for resultado in lista_resultados:
+            resultados.insert("","end",values=(resultado[0].capitalize(),resultado[1].title(),resultado[2].capitalize(),resultado[3],resultado[4] + "/5"))
         
         #muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
@@ -296,7 +316,7 @@ def main():
         #se define la nueva pantalla
         gen_window = Toplevel(root)
         #llama a la funcion anadir_genero, que crea la nueva ventana
-        anadir_genero(gen_window)
+        anadir_genero(gen_window,enter,leave)
         
         #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
         gen_window.grab_set()
@@ -317,7 +337,7 @@ def main():
         #se define la nueva pantalla
         pel_window = Toplevel(root)
         #llama a la funcion anadir_genero, que crea la nueva ventana
-        anadir_pelicula(pel_window)
+        anadir_pelicula(pel_window,enter,leave)
         
         #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
         pel_window.grab_set()

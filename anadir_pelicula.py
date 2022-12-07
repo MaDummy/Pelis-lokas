@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter.font as font
 
 
-def anadir_pelicula(pel_window):
+def anadir_pelicula(pel_window,enter,leave):
     #Interfaz Grafica
 
     pel_window.geometry("1074x710") #Se establece el alto y ancho de la ventana.
@@ -98,7 +98,11 @@ def anadir_pelicula(pel_window):
     btn_cancelar.grid(row=0, column=0)
 
     #Se crea el botón para añadir peliculas
-    btn_añadir = Button(buttons_frame, bg="#D72323", text="Añadir Pelicula", fg="white", padx=75, bd=0, pady=15,activebackground="#7c242c",activeforeground="white",cursor="hand2")
-    btn_añadir["font"] = button_font
+    btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Pelicula", fg="white", padx=75, bd=0, pady=15,activebackground="#7c242c",activeforeground="white",cursor="hand2")
+    btn_anadir["font"] = button_font
 
-    btn_añadir.grid(row=0,column=1,padx=(0,0),sticky="w")
+    btn_anadir.grid(row=0,column=1,padx=(0,0),sticky="w")
+
+    #eventos
+    btn_anadir.bind("<Enter>",enter)
+    btn_anadir.bind("<Leave>",leave)

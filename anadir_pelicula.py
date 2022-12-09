@@ -111,7 +111,7 @@ def anadir_pelicula(pel_window,enter,leave):
 
     pel_window.geometry("{}x{}+{}+{}".format(
         1074, 
-        700, 
+        800, 
         borde_x, 
         borde_y))
     '''PARA CENTRAR LA VENTANA'''

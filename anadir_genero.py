@@ -16,7 +16,8 @@ def anadir_genero(gen_window,enter,leave):
         gp_existe = False
 
         if genero_ingresado == '' or genero_padre == '': #Si algun dato es vacío, tira error.
-            print("Falta algún tipo de dato, intente nuevamente.")
+            msg["text"] = "Falta algún tipo de dato, intente nuevamente."
+            msg.place(relx=0.27)
             return
 
         for genero in lista_generos:

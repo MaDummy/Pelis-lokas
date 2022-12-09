@@ -625,6 +625,8 @@ def main():
     
     search.bind("<FocusIn>",focus_in)
     search.bind("<FocusOut>",focus_out)
+    
+    search.bind("<Return>",busqueda)
 
     #Mainloop
     root.mainloop()

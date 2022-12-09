@@ -27,6 +27,7 @@ def anadir_pelicula(pel_window,enter,leave):
 
 
     def valida_repeticion(titulo: str, director: str) -> bool:
+        print(titulo.lower())
         for pelicula in lista_peliculas: #Se valida si el titulo y el director están juntos en el archivo de películas.
             if titulo.lower() == pelicula[0].lower()  and director.lower() == pelicula[1].lower():
                 return True
@@ -75,11 +76,11 @@ def anadir_pelicula(pel_window,enter,leave):
 
         '''SE RECOGEN LOS TEXTOS INGRESADOS'''
 
-        titulo = entry_titulo.get()
-        director = entry_director.get()
-        genero = entry_genero.get()
-        ano = entry_ano.get()
-        valoracion = entry_valoracion.get()
+        titulo = entry_titulo.get().strip()
+        director = entry_director.get().strip()
+        genero = entry_genero.get().strip()
+        ano = entry_ano.get().strip()
+        valoracion = entry_valoracion.get().strip()
 
         '''SE CREAN LAS LISTAS CORRESPONDIENTES A LOS GÉNEROS Y PELÍCULAS'''
 

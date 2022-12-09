@@ -49,6 +49,7 @@ search_icon = PhotoImage(file="img/search.png")
 home_icon = PhotoImage(file="img/home.png")
 movie_icon = PhotoImage(file="img/movie.png")
 genre_icon = PhotoImage(file="img/genre.png")
+
 #estados
 filtros_estado = 0
 
@@ -130,7 +131,7 @@ class AutoScrollbar(ttk.Scrollbar):
 
 #funcion principal
 def main(): 
-    #funciones encargadas de abrir y cerrar el menú de filtros
+    '''funciones encargadas de abrir y cerrar el menú de filtros'''
     def menu_filtros():
         global filtros_estado
         
@@ -199,7 +200,7 @@ def main():
         peliculas_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
         peliculas_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
          
-    #Funciones encargadas de llenar las distintas tablas del programa
+    '''Funciones encargadas de llenar las distintas tablas del programa'''
     def llena_peliculas():
         for pelicula in peliculas:
             tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
@@ -217,7 +218,7 @@ def main():
         combo_genero["values"] = tuple(combo_values)
     
     
-    #funcion de busqueda de peliculas
+    '''funcion de busqueda de peliculas'''
     def busqueda(e=""):
         global filtros_estado
         
@@ -325,7 +326,7 @@ def main():
         #cierra los filtros
         cierra_filtros()
     
-    #funciones de limpieza
+    '''funciones de limpieza'''
     def limpia_filtros():
         combo_genero.set("<Cualquiera>")
         combo_valoracion.set("<Cualquiera>")
@@ -372,7 +373,7 @@ def main():
         root.focus_set()
     
     
-    #funciones de actualizacion (al añadir peliculas y añadir generos)
+    '''funciones de actualizacion (al añadir peliculas y añadir generos)'''
     def actualiza_generos():
         global generos
         
@@ -415,14 +416,14 @@ def main():
         tabla_peliculas.delete(*tabla_peliculas.get_children())
         llena_peliculas()
 
-    #funciones evento - hover
+    '''funciones evento - hover'''
     def enter(e):
         e.widget['background'] = BTN_HOVER_COLOR
 
     def leave(e):
         e.widget['background'] = BTN_COLOR
     
-    #funciones evento - focus
+    '''funciones evento - focus'''
     def focus_in(e):
         search["fg"] = "white"
         if e.widget.get() == "Buscar pelicula":
@@ -444,7 +445,7 @@ def main():
     
     app_frame.grid(row=0,column=0,sticky="nswe",padx=30,pady=20)
     
-    
+
     #barra de busqueda
     search_frame = Frame(app_frame,borderwidth=10,bg=LIGHT_COLOR)
     search_frame.columnconfigure(index=0,weight=1)    

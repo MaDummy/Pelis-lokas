@@ -100,8 +100,9 @@ def anadir_pelicula(pel_window,enter,leave):
             msg.place_forget()
             msg.place(relx=0.4)
   
-    '''------------------------------------------------INTERFAZ GRÁFICA------------------------------------------------'''
+    #Interfaz Grafica
 
+    #configuracion de ventana
     '''PARA CENTRAR LA VENTANA'''
     largo = pel_window.winfo_screenwidth()
     altura = pel_window.winfo_screenheight()
@@ -119,17 +120,19 @@ def anadir_pelicula(pel_window,enter,leave):
     pel_window.configure(bg ="#222831") #El color del fondo
     pel_window.columnconfigure(index=0, weight=1) #para que el frame principal se expanda horizontalmente
     pel_window.rowconfigure(index=0, weight=1) #para que el frame principal se expanda verticalmente
+    pel_window.resizable(False, False)
 
     main_frame = Frame(pel_window,bg="#222831") #se define el frame donde ira el contenido
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=50)
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
 
+    
     #mensaje
     msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
     msg["font"] = ("Calibri", 20)
     
-    '''TEXTOS'''
 
+    #textos
     titulo_txt = Label(main_frame, text="Titulo", bg="#222831", fg="white")
     titulo_txt["font"] = ("Calibri",20)
 
@@ -145,8 +148,8 @@ def anadir_pelicula(pel_window,enter,leave):
     valoracion_txt = Label(main_frame, text="Valoracion", bg="#222831", fg="white")
     valoracion_txt["font"] = ("Calibri",20)
 
-    '''SE DEFINEN LAS CAJAS DE TEXTO'''
 
+    #entradas - frames
     entry_frame_titulo = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_padre
     entry_frame_titulo.columnconfigure(index=0, weight=1)    
     
@@ -162,9 +165,7 @@ def anadir_pelicula(pel_window,enter,leave):
     entry_frame_valoracion = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_valoracion
     entry_frame_valoracion.columnconfigure(index=0, weight=1)    
     
-
-    '''SE DEFINEN LAS ENTRADAS DE TEXTO'''
-
+    #entradas - entrys
     entry_titulo = Entry(entry_frame_titulo, bd=0, bg="#3A4750", fg="white")
     entry_titulo["font"] = ("Calibri",14)
 
@@ -180,8 +181,7 @@ def anadir_pelicula(pel_window,enter,leave):
     entry_valoracion = Entry(entry_frame_valoracion, bd=0, bg="#3A4750", fg="white")
     entry_valoracion["font"] = ("Calibri",14)
 
-    '''SE POSICIONAN LAS CAJAS DE TEXTO Y SUS ENTRADAS CORRESPONDIENTES'''
-
+    #entradas- posicionamiento
     titulo_txt.grid(row=0, column=0, sticky="w",pady=(80,0))
     entry_frame_titulo.grid(row=0, column=1, pady=(80,0),sticky="we")
     entry_titulo.grid(row=0, column=0, sticky="nswe")
@@ -202,26 +202,26 @@ def anadir_pelicula(pel_window,enter,leave):
     entry_frame_valoracion.grid(row=4, column=1,sticky="we")
     entry_valoracion.grid(row=0, column=0, sticky="nswe")
 
-    '''BOTONES'''
 
+    #botones - frame y fuente
     button_font = font.Font(size=13,family="Arial",weight="bold")
-
     buttons_frame = Frame(main_frame,bg="#222831") #Frame donde iran los botones
-    buttons_frame.grid(row=5, column=1, pady=50, sticky="we",padx=(45,0))
-
-    #BOTON CANCELAR
+    
+    #botones - cancelar
     btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #Frame donde va el boton cancelar
     btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15,activebackground="#262C35",activeforeground="white",cursor="hand2",command=pel_window.destroy)
     btn_cancelar["font"] = button_font
 
-    btn_cancelar_frame.grid(row=0, column=0,padx=(0,60))
-    btn_cancelar.grid(row=0, column=0)
-
-    #BOTON AÑADIR PELICULAS
+    #botones - añadir pelicula
     btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Pelicula", fg="white", padx=75, bd=0, pady=15,activebackground="#7c242c",activeforeground="white",cursor="hand2",command=anade_pelicula)
     btn_anadir["font"] = button_font
 
+    #botones - posicionamiento
+    buttons_frame.grid(row=5, column=1, pady=50, sticky="we",padx=(45,0))
+    btn_cancelar_frame.grid(row=0, column=0,padx=(0,60))
+    btn_cancelar.grid(row=0, column=0)
     btn_anadir.grid(row=0,column=1,padx=(0,0),sticky="w")
+
 
     #EVENTOS
     btn_anadir.bind("<Enter>",enter)

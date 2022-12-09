@@ -64,6 +64,7 @@ def anadir_genero(gen_window,enter,leave):
     gen_window.configure(bg ="#222831") #El color del fondo
     gen_window.columnconfigure(index=0, weight=1) #para que el frame principal se expanda horizontalmente
     gen_window.rowconfigure(index=0, weight=1) #para que el frame principal se expanda verticalmente
+    gen_window.resizable(False, False)
 
     main_frame = Frame(gen_window,bg="#222831") #se define el frame donde ira el contenido
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=(40,0))

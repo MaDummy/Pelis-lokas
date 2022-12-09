@@ -10,8 +10,8 @@ def anadir_genero(gen_window,enter,leave):
     def subgenero():
         '''FUNCION QUE AÑADE SUBGENEROS'''
         nonlocal archivo_generos
-        genero_padre = entry_padre.get() #Se asigna una variable que toma el valor del género padre escrito.
-        genero_ingresado = entry_genero.get() #Se asigna una variable que toma el valor del género ingresado escrito.
+        genero_padre = entry_padre.get().strip() #Se asigna una variable que toma el valor del género padre escrito.
+        genero_ingresado = entry_genero.get().strip() #Se asigna una variable que toma el valor del género ingresado escrito.
 
         gp_existe = False
 

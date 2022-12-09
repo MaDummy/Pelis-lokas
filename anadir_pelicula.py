@@ -9,6 +9,9 @@ def valida_genero(genero): #valida que existe el genero ingresado ya existe
     return False
 
 def valida_ano(ano): 
+    if not ano.isdigit():
+        return False
+        
     if int(ano) < 1895:
         return False
     return True

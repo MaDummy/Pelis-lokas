@@ -31,7 +31,7 @@ def anadir_genero(gen_window,enter,leave):
 
                 if generos.index(genero) == len(generos)-1 and gp_existe: #Una vez ya haya revisado toda la lista de generos, si el genero ingresado
                     generos.append([genero_ingresado, genero_padre])      #sigue sin existir, entonces lo ingresa a la lista de generos y al archivo csv.
-                    arch_generos.write(f'“{genero_ingresado}”, “{genero_padre}”\n')
+                    arch_generos.write(f'“{genero_ingresado.capitalize()}”, “{genero_padre.capitalize()}”\n')
                     
                     rect = Frame(main_frame,width=700,height=100,bg="#222831") #rectangulo para ocultar el mensaje anterior
                     rect.place(relx=0.2)

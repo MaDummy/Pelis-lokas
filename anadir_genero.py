@@ -15,6 +15,10 @@ def anadir_genero(gen_window,enter,leave):
 
         gp_existe = False
 
+        if genero_ingresado == '' or genero_padre == '': #Si algun dato es vacío, tira error.
+            print("Falta algún tipo de dato, intente nuevamente.")
+            return
+
         for genero in lista_generos:
             if genero_padre.lower() == genero[0].lower() or genero_padre.lower() == genero[1].lower(): #Revisa la primera vez que el genero padre aparezca dentro de los generos.
                 gp_existe = True
@@ -31,9 +35,9 @@ def anadir_genero(gen_window,enter,leave):
                 msg["text"] = "Se ha ingresado con exito"
                 msg.place_forget()
                 msg.place(relx=0.385)
-                break #Como a la lista de generos se le añade un indice más, revisará la lista en el nuevo índice. Para evitar esto, puse un break.
+                break #Como a la lista de generos se le añade un indice más, revisará la lista en el nuevo índice. Para evitar esto, se pone un break.
 
-            if lista_generos.index(genero) == len(lista_generos)-1 and not gp_existe: #Si al revisar la lista de generos, el genero padre sigue sin existir,          
+            if lista_generos.index(genero) == len(lista_generos)-1 and not gp_existe: #Si al revisar la lista de generos, el genero padre sigue sin existir, tira mensaje de error.         
                 msg["text"] = "El género padre no existe."
                 msg.place_forget()
                 msg.place(relx=0.385)

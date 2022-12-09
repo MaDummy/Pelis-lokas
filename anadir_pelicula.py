@@ -2,102 +2,91 @@ from tkinter import *
 import tkinter.font as font
 from crea_lista import crea_lista
 
-def valida_genero(genero: str) -> bool: #Valida que existe el genero ingresado ya existe
-    for generos in lista_genero:
-        if genero.lower() == generos[0].lower() or genero.lower() == generos[1].lower():
-            return True
-    return False
-
-def valida_ano(ano: str) -> bool: 
-    if not ano.isdigit(): #Se revisa que el año sea un número
-        return False
-    if int(ano) < 1895: #Se revisa que sea mayor o igual a 1895.
-        return False
-    return True
-
-
-def valida_valoracion(valoracion: str) -> bool:
-    if not valoracion.isdigit(): #Se revisa que la validación sea un número.
-        return False
-    if (int(valoracion) < 1) or (int(valoracion) > 5): #Se revisa que la valoración esté entre 1 y 5.
-        return False
-    return True
-
-
-def valida_repeticion(titulo: str, director: str) -> bool:
-    for pelicula in peliculas: #Se valida si el titulo y el director están juntos en el archivo de películas.
-        if titulo.lower() == pelicula[0].lower()  and director.lower() == pelicula[1].lower():
-            return True
-    return False
-
-
-def valida_pelicula(titulo: str, director: str, genero: str, ano: str, valoracion: str) -> bool:
-    if titulo == '' or director == '' or genero == '' or ano == '' or valoracion == '':
-        print("Falta algun tipo de dato. Intente nuevamente.")
+def anadir_pelicula(pel_window,enter,leave):
+    def valida_genero(genero: str) -> bool: #Valida que existe el genero ingresado ya existe
+        for generos in lista_generos:
+            if genero.lower() == generos[0].lower() or genero.lower() == generos[1].lower():
+                return True
         return False
 
-    if valida_repeticion(titulo, director):
-        print("La película ya existe")
+    
+    def valida_ano(ano: str) -> bool: 
+        if not ano.isdigit(): #Se revisa que el año sea un número
+            return False
+        if int(ano) < 1895: #Se revisa que sea mayor o igual a 1895.
+            return False
+        return True
+
+
+    def valida_valoracion(valoracion: str) -> bool:
+        if not valoracion.isdigit(): #Se revisa que la validación sea un número.
+            return False
+        if (int(valoracion) < 1) or (int(valoracion) > 5): #Se revisa que la valoración esté entre 1 y 5.
+            return False
+        return True
+
+
+    def valida_repeticion(titulo: str, director: str) -> bool:
+        for pelicula in lista_peliculas: #Se valida si el titulo y el director están juntos en el archivo de películas.
+            if titulo.lower() == pelicula[0].lower()  and director.lower() == pelicula[1].lower():
+                return True
         return False
 
-    if not valida_genero(genero):
-        print("No se pudo agregar la pelicula, el genero no existe")
-        return False
 
-    if not valida_ano(ano):
-        print("No se pudo agregar la película, el año no es valido")
-        return False
+    def valida_pelicula(titulo: str, director: str, genero: str, ano: str, valoracion: str) -> bool:
+        if titulo == '' or director == '' or genero == '' or ano == '' or valoracion == '':
+            print("Falta algun tipo de dato. Intente nuevamente.")
+            return False
+        
+        if not valida_ano(ano):
+            print("No se pudo agregar la película, el año no es valido")
+            return False
 
-    if not valida_valoracion(valoracion):
-        print("No se pudo agregar la pelicula, la valoración no es valida")
-        return False
+        if not valida_valoracion(valoracion):
+            print("No se pudo agregar la pelicula, la valoración no es valida")
+            return False
+        
+        if not valida_genero(genero):
+            print("No se pudo agregar la pelicula, el genero no existe")
+            return False
+        
+        if valida_repeticion(titulo, director):
+            print("La película ya existe")
+            return False
 
-    return True
+        return True
 
 
-def anade_pelicula():
-    '''VARIABLES GLOBALES'''
+    def anade_pelicula():
+        '''VARIABLES GLOBALES'''
 
-    global peliculas
-    global lista_genero
+        global lista_peliculas
+        global lista_generos
 
-    '''SE RECOGEN LOS TEXTOS INGRESADOS'''
+        '''SE RECOGEN LOS TEXTOS INGRESADOS'''
 
-    titulo = entry_titulo.get()
-    director = entry_director.get()
-    genero = entry_genero.get()
-    ano = entry_ano.get()
-    valoracion = entry_valoracion.get()
+        titulo = entry_titulo.get()
+        director = entry_director.get()
+        genero = entry_genero.get()
+        ano = entry_ano.get()
+        valoracion = entry_valoracion.get()
 
-    '''SE CREAN LAS LISTAS CORRESPONDIENTES A LOS GÉNEROS Y PELÍCULAS'''
+        '''SE CREAN LAS LISTAS CORRESPONDIENTES A LOS GÉNEROS Y PELÍCULAS'''
 
-    generos_arch = "generos.csv"
-    lista_genero = crea_lista(generos_arch)
+        archivo_generos = open("generos.csv","r+",encoding="utf-8")
+        lista_generos = crea_lista(archivo_generos)
 
-    peliculas_arch = "peliculas.csv"
-    peliculas = crea_lista(peliculas_arch)
+        archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8")
+        lista_peliculas = crea_lista(archivo_peliculas)
 
-    '''VALIDACIÓN PRINCIPAL'''
+        '''VALIDACIÓN PRINCIPAL'''
 
-    if valida_pelicula(titulo, director, genero, ano, valoracion): #Si la película es válida, se añade a la lista y a la base de datos de películas.
-        peliculas_arch = open('peliculas.csv', 'a', encoding = 'utf-8')
+        if valida_pelicula(titulo, director, genero, ano, valoracion): #Si la película es válida, se añade a la lista y a la base de datos de películas.
+            pelicula = [titulo.title(), director.title(), genero.capitalize(), int(ano), int(valoracion)]
+            lista_peliculas.append(pelicula)
 
-        pelicula = [titulo.title(), director.title(), genero.capitalize(), int(ano), int(valoracion)]
-        peliculas.append(pelicula)
-
-        peliculas_arch.write(f'“{titulo.title()}”, “{director.title()}”, “{genero.capitalize()}”, {ano}, {valoracion}”\n')
-
-        peliculas_arch.close()
-
-def ventana_anadir_peli(pel_window,enter,leave):
-    '''VARIABLES GLOBALES'''
-
-    global entry_titulo
-    global entry_director
-    global entry_genero
-    global entry_ano
-    global entry_valoracion
-
+            archivo_peliculas.write(f'“{titulo.title()}”, “{director.title()}”, “{genero.capitalize()}”, {ano}, {valoracion}”\n')
+  
     '''------------------------------------------------INTERFAZ GRÁFICA------------------------------------------------'''
 
     '''PARA CENTRAR LA VENTANA'''

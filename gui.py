@@ -3,7 +3,7 @@ from tkinter import ttk
 import tkinter.font as font
 from crea_lista import crea_lista
 from anadir_genero import anadir_genero
-from anadir_pelicula import ventana_anadir_peli
+from anadir_pelicula import anadir_pelicula
 
 root = Tk()
 
@@ -26,8 +26,8 @@ root.configure(bg="#222831")
 
 
 #archivos
-archivo_generos = "generos.csv"
-archivo_peliculas = "peliculas.csv"
+archivo_generos = open("generos.csv","r+",encoding="utf-8") 
+archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8") 
 
 generos = crea_lista(archivo_generos)
 peliculas = crea_lista(archivo_peliculas)
@@ -353,9 +353,8 @@ def main():
         root.wait_window(gen_window)
 
         #cuando se cierra la ventana, lee nuevamente el archivo de generos y crea una lista con los generos
-        with open('generos.csv','r', encoding = 'utf-8') as arch_generos:
-            arch_generos.seek(0)
-            generos = crea_lista(archivo_generos)
+        archivo_generos.seek(0)
+        generos = crea_lista(archivo_generos)
 
         #reinicia el arbol de generos y el combobox
         arbol_generos.delete(*arbol_generos.get_children())
@@ -369,18 +368,17 @@ def main():
         #se define la nueva pantalla
         pel_window = Toplevel(root)
         #llama a la funcion anadir_genero, que crea la nueva ventana
-        ventana_anadir_peli(pel_window,enter,leave)
+        anadir_pelicula(pel_window,enter,leave)
         
         #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
         pel_window.grab_set()
         root.wait_window(pel_window)
         
         #cuando se cierra la ventana, lee nuevamente el archivo de peliculas y crea una lista con las peliculas
-        with open(archivo_peliculas, 'r', encoding = 'utf-8') as arch_peliculas:
-            arch_peliculas.seek(0)
-            peliculas = crea_lista(archivo_peliculas)
+        archivo_peliculas.seek(0)
+        peliculas = crea_lista(archivo_peliculas)
         #reinicia la tabla de peliculas
-        tabla_peliculas.delete(tabla_peliculas.get_children())
+        tabla_peliculas.delete(*tabla_peliculas.get_children())
         llena_peliculas()
 
     #funciones evento - hover

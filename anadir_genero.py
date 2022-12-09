@@ -71,7 +71,7 @@ def anadir_genero(gen_window,enter,leave):
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=(40,0))
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
 
-    #MENSAJES DE ERROR
+    '''MENSAJE'''
     msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
     msg["font"] = ("Calibri", 20)
 
@@ -131,7 +131,6 @@ def anadir_genero(gen_window,enter,leave):
     
     btn_anadir.grid(row=0,column=1,padx=(0,0),sticky="w")
 
-
-    #EVENTOS
+    '''EVENTOS'''
     btn_anadir.bind("<Enter>",enter)
     btn_anadir.bind("<Leave>",leave)

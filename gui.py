@@ -447,14 +447,14 @@ def main():
     
     
     '''BARRA DE BÚSQUEDA'''
-    #frame
+    #FRAME
     search_frame = Frame(app_frame,borderwidth=10,bg=LIGHT_COLOR)
     search_frame.columnconfigure(index=0,weight=1)    
-    #entry
+    #ENTRY
     search = Entry(search_frame,bg=LIGHT_COLOR,bd=0,fg=LIGHT_TXT_COLOR)
     search["font"] = ("Calibri",13)
     search.insert(END,"Buscar pelicula")
-    #boton
+    #BOTON
     search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR,cursor="hand2")
     
     #POSICIONAMIENTO DE WIDGETS
@@ -512,7 +512,7 @@ def main():
     valoracion_txt.grid(row=1,column=0, sticky="w",padx=(30,20))
     combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
     
-    '''----------SECCIÓN VISTA DE ÁRBOL: 'GÉNEROS'---------'''
+    '''SECCIÓN VISTA DE ÁRBOL: GÉNEROS'''
     #BOTÓN
     arbol_generos_btn = Button(app_frame,image=genre_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_generos)
     
@@ -540,7 +540,7 @@ def main():
     arbol_scrollbar.grid(row=0,column=0,sticky="nse")
     arbol_generos.grid(row=0,column=0, sticky="nswe",padx=(10,0))
     
-    '''------------SECCIÓN 'PELÍCULAS'------------'''
+    '''SECCIÓN PELÍCULAS'''
     #BOTÓN
     lista_peliculas_btn = Button(app_frame,image=movie_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_peliculas)
     lista_peliculas_btn.grid(row=3,column=3,sticky="e",pady=(0,30))
@@ -580,7 +580,7 @@ def main():
     tabla_peliculas.grid(row=0,column=0,sticky="nswe")
     tabla_peliculas_scrollbar.grid(row=0,column=0,sticky="nse")
     
-    '''--------RESULTADOS DE BÚSQUEDA--------'''
+    '''RESULTADOS DE BÚSQUEDA'''
     #FRAME Y TEXTO
     resultados_frame = Frame(app_frame,bg=BG_COLOR)
     resultados_frame.columnconfigure(index=0,weight=1)
@@ -614,7 +614,7 @@ def main():
     resultados.grid(row=0,column=0,sticky="nswe")
     resultados_scrollbar.grid(row=0,column=0,sticky="nse")
     
-    '''------------------------------------------------------'''
+    '''EVENTOS'''
     #Eventos secundarios
     button_gen.bind("<Enter>",enter)
     button_gen.bind("<Leave>",leave)
@@ -627,7 +627,7 @@ def main():
 
     search.bind("<Return>",busqueda)
 
-    #Mainloop
+    '''MAINLOOP'''
     root.mainloop()
    
 main()

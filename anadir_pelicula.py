@@ -2,36 +2,36 @@ from tkinter import *
 import tkinter.font as font
 from crea_lista import crea_lista
 
-def valida_genero(genero): #valida que existe el genero ingresado ya existe
+def valida_genero(genero: str) -> bool: #Valida que existe el genero ingresado ya existe
     for generos in lista_genero:
         if genero.lower() == generos[0].lower() or genero.lower() == generos[1].lower():
             return True
     return False
 
-def valida_ano(ano): 
-    if not ano.isdigit():
+def valida_ano(ano: str) -> bool: 
+    if not ano.isdigit(): #Se revisa que el año sea un número
         return False
-        
-    if int(ano) < 1895:
-        return False
-    return True
-
-
-def valida_valoracion(valoracion):
-    if (int(valoracion) < 1) or (int(valoracion) > 5):
+    if int(ano) < 1895: #Se revisa que sea mayor o igual a 1895.
         return False
     return True
 
 
-def valida_repeticion(titulo, director):
-    for pelicula in peliculas:
+def valida_valoracion(valoracion: str) -> bool:
+    if not valoracion.isdigit(): #Se revisa que la validación sea un número.
+        return False
+    if (int(valoracion) < 1) or (int(valoracion) > 5): #Se revisa que la valoración esté entre 1 y 5.
+        return False
+    return True
+
+
+def valida_repeticion(titulo: str, director: str) -> bool:
+    for pelicula in peliculas: #Se valida si el titulo y el director están juntos en el archivo de películas.
         if titulo.lower() == pelicula[0].lower()  and director.lower() == pelicula[1].lower():
             return True
-
     return False
 
 
-def valida_pelicula(titulo, director, genero, ano, valoracion):
+def valida_pelicula(titulo: str, director: str, genero: str, ano: str, valoracion: str) -> bool:
     if titulo == '' or director == '' or genero == '' or ano == '' or valoracion == '':
         print("Falta algun tipo de dato. Intente nuevamente.")
         return False
@@ -56,8 +56,12 @@ def valida_pelicula(titulo, director, genero, ano, valoracion):
 
 
 def anade_pelicula():
+    '''VARIABLES GLOBALES'''
+
     global peliculas
     global lista_genero
+
+    '''SE RECOGEN LOS TEXTOS INGRESADOS'''
 
     titulo = entry_titulo.get()
     director = entry_director.get()
@@ -65,13 +69,17 @@ def anade_pelicula():
     ano = entry_ano.get()
     valoracion = entry_valoracion.get()
 
+    '''SE CREAN LAS LISTAS CORRESPONDIENTES A LOS GÉNEROS Y PELÍCULAS'''
+
     generos_arch = "generos.csv"
     lista_genero = crea_lista(generos_arch)
 
     peliculas_arch = "peliculas.csv"
     peliculas = crea_lista(peliculas_arch)
 
-    if valida_pelicula(titulo, director, genero, ano, valoracion):
+    '''VALIDACIÓN PRINCIPAL'''
+
+    if valida_pelicula(titulo, director, genero, ano, valoracion): #Si la película es válida, se añade a la lista y a la base de datos de películas.
         peliculas_arch = open('peliculas.csv', 'a', encoding = 'utf-8')
 
         pelicula = [titulo.title(), director.title(), genero.capitalize(), int(ano), int(valoracion)]
@@ -82,14 +90,15 @@ def anade_pelicula():
         peliculas_arch.close()
 
 def ventana_anadir_peli(pel_window,enter,leave):
-    #Variables globales
+    '''VARIABLES GLOBALES'''
+
     global entry_titulo
     global entry_director
     global entry_genero
     global entry_ano
     global entry_valoracion
 
-    #Interfaz Grafica
+    '''------------------------------------------------INTERFAZ GRÁFICA------------------------------------------------'''
 
     '''PARA CENTRAR LA VENTANA'''
     largo = pel_window.winfo_screenwidth()
@@ -113,7 +122,8 @@ def ventana_anadir_peli(pel_window,enter,leave):
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=50)
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
 
-    #texto
+    '''TEXTOS'''
+
     titulo_txt = Label(main_frame, text="Titulo", bg="#222831", fg="white")
     titulo_txt["font"] = ("Calibri",20)
 
@@ -129,7 +139,8 @@ def ventana_anadir_peli(pel_window,enter,leave):
     valoracion_txt = Label(main_frame, text="Valoracion", bg="#222831", fg="white")
     valoracion_txt["font"] = ("Calibri",20)
 
-    #se definen las cajas de ingreso de texto
+    '''SE DEFINEN LAS CAJAS DE TEXTO'''
+
     entry_frame_titulo = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_padre
     entry_frame_titulo.columnconfigure(index=0, weight=1)    
     entry_frame_titulo.grid(row=0, column=1, pady=(50,0),sticky="we")
@@ -150,7 +161,8 @@ def ventana_anadir_peli(pel_window,enter,leave):
     entry_frame_valoracion.columnconfigure(index=0, weight=1)    
     entry_frame_valoracion.grid(row=4, column=1, pady=(40,0),sticky="we")
 
-    #entradas
+    '''SE DEFINEN LAS ENTRADAS DE TEXTO'''
+
     entry_titulo = Entry(entry_frame_titulo, bd=0, bg="#3A4750", fg="white")
     entry_titulo["font"] = ("Calibri",14)
 
@@ -166,7 +178,8 @@ def ventana_anadir_peli(pel_window,enter,leave):
     entry_valoracion = Entry(entry_frame_valoracion, bd=0, bg="#3A4750", fg="white")
     entry_valoracion["font"] = ("Calibri",14)
 
-    #se posiciona el texto y las entradas
+    '''SE POSICIONAN LAS CAJAS DE TEXTO Y SUS ENTRADAS CORRESPONDIENTES'''
+
     titulo_txt.grid(row=0, column=0, sticky="w",pady=(50,0))
     entry_titulo.grid(row=0, column=0, sticky="nswe")
 
@@ -182,26 +195,27 @@ def ventana_anadir_peli(pel_window,enter,leave):
     valoracion_txt.grid(row=4, column=0, sticky="w",pady=(40,0),padx=(0,25))
     entry_valoracion.grid(row=0, column=0, sticky="nswe")
 
-    #botones
+    '''BOTONES'''
+
     button_font = font.Font(size=13,family="Arial",weight="bold")
 
-    buttons_frame = Frame(main_frame,bg="#222831") #frame donde iran los botones
+    buttons_frame = Frame(main_frame,bg="#222831") #Frame donde iran los botones
     buttons_frame.grid(row=5, column=1, pady=50, sticky="we",padx=(45,0))
 
-    #Se crea el botón para cancelar
-    btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #frame donde va el boton cancelar
+    #BOTON CANCELAR
+    btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #Frame donde va el boton cancelar
     btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15,activebackground="#262C35",activeforeground="white",cursor="hand2",command=pel_window.destroy)
     btn_cancelar["font"] = button_font
 
     btn_cancelar_frame.grid(row=0, column=0,padx=(0,60))
     btn_cancelar.grid(row=0, column=0)
 
-    #Se crea el botón para añadir peliculas
+    #BOTON AÑADIR PELICULAS
     btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Pelicula", fg="white", padx=75, bd=0, pady=15,activebackground="#7c242c",activeforeground="white",cursor="hand2",command=anade_pelicula)
     btn_anadir["font"] = button_font
 
     btn_anadir.grid(row=0,column=1,padx=(0,0),sticky="w")
 
-    #eventos
+    #EVENTOS
     btn_anadir.bind("<Enter>",enter)
     btn_anadir.bind("<Leave>",leave)

@@ -380,7 +380,7 @@ def main():
             arch_peliculas.seek(0)
             peliculas = crea_lista(archivo_peliculas)
         #reinicia la tabla de peliculas
-        tabla_peliculas.delete(*tabla_peliculas.get_children())
+        tabla_peliculas.delete(tabla_peliculas.get_children())
         llena_peliculas()
 
     #funciones evento - hover

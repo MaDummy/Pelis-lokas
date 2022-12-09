@@ -18,10 +18,10 @@ def anadir_genero(gen_window,enter,leave):
             gp_existe = False
 
             for genero in generos:
-                if genero_padre in genero: #Revisa la primera vez que el genero padre aparezca dentro de los generos.
+                if genero_padre.lower() == genero[0].lower() or genero_padre.lower() == genero[1].lower(): #Revisa la primera vez que el genero padre aparezca dentro de los generos.
                     gp_existe = True
 
-                if gp_existe and genero_ingresado in genero: #Si el genero padre existe y el genero ingresado también, printea que ya existe.
+                if gp_existe and genero_ingresado.lower() == genero[0].lower() or genero_ingresado.lower() ==  genero[1].lower(): #Si el genero padre existe y el genero ingresado también, printea que ya existe.
                     rect = Frame(main_frame,width=700,height=100,bg="#222831") #Rectangulo para ocultar el mensaje anterior
                     rect.place(relx=0.2)
                     msg = Label(main_frame, text="El género ya existe.", bg="#222831",fg="white") #Mensaje de error

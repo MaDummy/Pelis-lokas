@@ -1,5 +1,5 @@
 #lee un archivo .csv y retorna una lista con cada una de las lineas del archivo como una sublista
-def crea_lista(archivo):
+def crea_lista(archivo) -> list:
     datos = archivo.readlines()
     
     if datos[len(datos)-1][len(datos[len(datos)-1])-1:] != '\n': #Verifica si el ultimo indice(str) del ultimo indice(list) es '\n'.

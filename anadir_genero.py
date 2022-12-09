@@ -10,14 +10,14 @@ def anadir_genero(gen_window,enter,leave):
     def subgenero():
         '''FUNCION QUE AÑADE SUBGENEROS'''
         nonlocal archivo_generos
-        genero_padre = entry_padre.get() #Se asigna una variable que toma el valor del género padre escrito.
-        genero_ingresado = entry_genero.get() #Se asigna una variable que toma el valor del género ingresado escrito.
+        genero_padre = entry_padre.get().strip() #Se asigna una variable que toma el valor del género padre escrito.
+        genero_ingresado = entry_genero.get().strip() #Se asigna una variable que toma el valor del género ingresado escrito.
 
         gp_existe = False
 
         if genero_ingresado == '' or genero_padre == '': #Si algun dato es vacío, tira error.
-            msg["text"] = "Falta algún tipo de dato, intente nuevamente."
-            msg.place(relx=0.27)
+            msg["text"] = "Falta algún tipo de dato. Ingrese nuevamente."
+            msg.place(relx=0.260)
             return
 
         for genero in lista_generos:
@@ -43,11 +43,11 @@ def anadir_genero(gen_window,enter,leave):
                 msg.place_forget()
                 msg.place(relx=0.385)
 
+    '''---------------------INTERFAZ GRÁFICA---------------------'''
 
-    #Interfaz Grafica
-
-    #configuracion ventana
+    #Configuracion ventana
     '''PARA CENTRAR LA VENTANA'''
+
     largo = gen_window.winfo_screenwidth()
     altura = gen_window.winfo_screenheight()
 
@@ -59,6 +59,7 @@ def anadir_genero(gen_window,enter,leave):
         550, 
         borde_x, 
         borde_y))
+        
     '''PARA CENTRAR LA VENTANA'''
 
     gen_window.configure(bg ="#222831") #El color del fondo
@@ -70,33 +71,33 @@ def anadir_genero(gen_window,enter,leave):
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=(40,0))
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
 
-    #mensaje
+    #MENSAJES DE ERROR
     msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
     msg["font"] = ("Calibri", 20)
 
-    #texto
+    #TEXTOS
     genero_padre_txt = Label(main_frame, text="Genero Padre", bg="#222831", fg="white")
     genero_padre_txt["font"] = ("Calibri",20)
 
     genero_txt = Label(main_frame, text="Genero", bg="#222831", fg="white")
     genero_txt["font"] = ("Calibri",20)
 
-
-    #entradas - frames
+    '''ENTRYS'''
+    #FRAMES
     entry_frame_padre = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_padre
     entry_frame_padre.columnconfigure(index=0, weight=1)    
 
     entry_frame_genero = Frame(main_frame,bd=13,bg="#3A4750") #para agregarle padding a entry_genero
     entry_frame_genero.columnconfigure(index=0, weight=1)    
 
-    #entradas - entrys
+    #ENTRYS PRINCIPALES
     entry_padre = Entry(entry_frame_padre, bd=0, bg="#3A4750", fg="white")
     entry_padre["font"] = ("Calibri",14)
 
     entry_genero = Entry(entry_frame_genero, bd=0, bg="#3A4750", fg="white")
     entry_genero["font"] = ("Calibri",14)
 
-    #entradas - posicionamiento
+    #POSICIONES
     entry_frame_padre.grid(row=0, column=1, pady=(110,0),sticky="we")
     entry_frame_genero.grid(row=1, column=1, sticky="we")
 
@@ -106,23 +107,23 @@ def anadir_genero(gen_window,enter,leave):
     genero_txt.grid(row=1, column=0, sticky="w",pady=50)
     entry_genero.grid(row=0, column=0, sticky="nswe")
 
-
-    #botones - fuente
+    '''BOTONES'''
+    #FUENTE
     button_font = font.Font(size=13,family="Arial",weight="bold")
 
-    #botones - frame
+    #FRAME
     buttons_frame = Frame(main_frame,bg="#222831") #frame donde iran los botones
 
-    #botones - cancelar
+    #CANCELAR
     btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #frame donde va el boton cancelar
     btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15, command=gen_window.destroy,activebackground="#262C35",activeforeground="white",cursor="hand2")
     btn_cancelar["font"] = button_font
 
-    #botones - añadir
+    #AÑADIR
     btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgenero", fg="white", padx=70, bd=0, pady=15, command=subgenero,activebackground="#7c242c",activeforeground="white",cursor="hand2")
     btn_anadir["font"] = button_font
 
-    #botones - posicionamiento 
+    #POSICIONAMIENTO DE BOTONES
     buttons_frame.grid(row=2, column=1, pady=30, sticky="we",padx=(30,0))
 
     btn_cancelar_frame.grid(row=0, column=0,padx=(0,60))
@@ -131,6 +132,6 @@ def anadir_genero(gen_window,enter,leave):
     btn_anadir.grid(row=0,column=1,padx=(0,0),sticky="w")
 
 
-    #eventos
+    #EVENTOS
     btn_anadir.bind("<Enter>",enter)
     btn_anadir.bind("<Leave>",leave)

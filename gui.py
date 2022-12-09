@@ -127,11 +127,12 @@ class AutoScrollbar(ttk.Scrollbar):
             self.grid()
         Scrollbar.set(self, low, high)
 
-'''----------FUNCIONES-----------'''
+'''----------FUNCIÓN PRINCIPAL-----------'''
 
 #funcion principal
 def main(): 
-    '''funciones encargadas de abrir y cerrar el menú de filtros'''
+    '''---------SUB-FUNCIONES PRINCIPALES---------'''
+    #funciones encargadas de abrir y cerrar el menú de filtros
     def menu_filtros():
         global filtros_estado
         
@@ -155,8 +156,7 @@ def main():
         #cambia su estado a 0 (cerrado)
         filtros_estado = 0
     
-    '''Funciones encargadas de desplegar el arbol de generos y la tabla de peliculas'''
-
+    #Funciones encargadas de desplegar el arbol de generos y la tabla de peliculas
     def despliega_generos():
         #Modifica el estilo del arbol de generos
         style.configure("Treeview", 
@@ -180,7 +180,7 @@ def main():
         generos_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
         generos_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
         
-    
+    #funcion que despliega las peliculas
     def despliega_peliculas():
         #Modifica el estilo de la tabla de peliculas
         style.configure("Treeview", 
@@ -200,10 +200,10 @@ def main():
         peliculas_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
         peliculas_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
          
-    '''Funciones encargadas de llenar las distintas tablas del programa'''
+    #Funciones encargadas de llenar las distintas tablas del programa
     def llena_peliculas():
         for pelicula in peliculas:
-            tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
+            tabla_peliculas.insert("","end",values=(pelicula[0].title(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
     
     def llena_arbol():
         arbol_generos.insert("", "end","general",text="General")
@@ -218,8 +218,8 @@ def main():
         combo_genero["values"] = tuple(combo_values)
     
     
-    '''funcion de busqueda de peliculas'''
-    def busqueda(e=""):
+    #FUNCIÓN BÚSQUEDA DE PELÍCULAS
+    def busqueda():
         global filtros_estado
         
         #limpia resultados anteriores
@@ -258,7 +258,7 @@ def main():
         if nombre == "Buscar pelicula":
             nombre = ''
 
-        if genero == "<Cualquiera>" and valoracion != "<Cualquiera>":
+        if genero == "<Cualquiera>" and valoracion != "<Cualquiera>": #Caso en el que se busque por valoración y nombre
             pelis_nom = []
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
@@ -273,7 +273,7 @@ def main():
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
                    lista_resultados.append(pelicula)
         
-        if genero != "<Cualquiera>" and valoracion == "<Cualquiera>":
+        if genero != "<Cualquiera>" and valoracion == "<Cualquiera>": #Caso en el que se busque por género y nombre
             pelis_nom = []
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
@@ -292,41 +292,41 @@ def main():
                             lista_resultados.append(pelicula) #Se añade la película
                     break
 
-        if genero != "<Cualquiera>" and valoracion != "<Cualquiera>":
+        if genero != "<Cualquiera>" and valoracion != "<Cualquiera>": #Caso en el que se busque por valoración, género y nombre.
             pelis_nom = []
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
                     if pelicula[4] == valoracion:
                         pelis_nom.append(pelicula)
 
-            for dupla_generos in generos: #Se recorren los géneros con la variable "género" equivalente a una lista que contiene al género y su género padre.
+            for dupla_generos in generos: #Mismo proceso que en búsqueda por género y nombre.
                 if genero.lower() == dupla_generos[0].lower() or genero.lower() == dupla_generos[1].lower():
-                    for subgenero in generos: #Se recorren los subgéneros correspondientes a ese género, por ejemplo "Romance" o "Acción".
-                        if subgenero[1].lower() == genero.lower(): #Si "Romance" es el género padre de la lista "genero".
-                            for pelicula in pelis_nom: #Se recorren las peliculas con la variable "pelicula", correspondiente a una lista con sus datos.
-                                if pelicula[2].lower() == subgenero[0].lower(): #Si la pelicula, en su segundo índice (género), corresponde al subgénero del género buscado
-                                    lista_resultados.append(pelicula) #Añade la película a la lista con los resultados.
+                    for subgenero in generos:
+                        if subgenero[1].lower() == genero.lower():
+                            for pelicula in pelis_nom:
+                                if pelicula[2].lower() == subgenero[0].lower():
+                                    lista_resultados.append(pelicula)
 
-                    for pelicula in pelis_nom: #Luego, recorre las peliculas asociadas al género especifico. Si fuera "Acción", buscaría la película asociada al género "Acción".
-                        if pelicula[2].lower() == genero.lower(): #Si la película, en su segundo índice, corresponde al género a buscar
-                            lista_resultados.append(pelicula) #Se añade la película
+                    for pelicula in pelis_nom:
+                        if pelicula[2].lower() == genero.lower():
+                            lista_resultados.append(pelicula)
                     break
 
-        #numero resultados
+        #Numero resultados
         numero_resultados["text"] = f"Se han encontrado {len(lista_resultados)} resultados"
         
-        #inserta los resultados en la tabla
+        #Inserta los resultados en la tabla
         for resultado in lista_resultados:
-            resultados.insert("","end",values=(resultado[0].capitalize(),resultado[1].title(),resultado[2].capitalize(),str(resultado[3]),str(resultado[4]) + "/5"))
+            resultados.insert("","end",values=(resultado[0].title(),resultado[1].title(),resultado[2].capitalize(),str(resultado[3]),str(resultado[4]) + "/5"))
         
-        #muestra la tabla con los resultados
+        #Muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
         
-        #cierra los filtros
+        #Cierra los filtros
         cierra_filtros()
     
-    '''funciones de limpieza'''
+    #Funciones de limpieza
     def limpia_filtros():
         combo_genero.set("<Cualquiera>")
         combo_valoracion.set("<Cualquiera>")
@@ -334,9 +334,9 @@ def main():
     def limpia_resultados():
         resultados.delete(*resultados.get_children())
             
-    #funcion que permite al usuario volver al menú principal
+    #Funcion que permite al usuario volver al menú principal
     def volver_home():
-        #modifica el estilo del arbol de generos
+        #Modifica el estilo del arbol de generos
         style.configure("Treeview", 
             font=("Calibri",17),
             background=LIGHT_COLOR,
@@ -367,13 +367,9 @@ def main():
         limpia_resultados()
         #limpia los filtros
         limpia_filtros()
-        cierra_filtros()
-        #limpia el entry
-        search.delete(0,END)
-        root.focus_set()
     
     
-    '''funciones de actualizacion (al añadir peliculas y añadir generos)'''
+    #funciones de actualizacion (al añadir peliculas y añadir generos)
     def actualiza_generos():
         global generos
         
@@ -397,6 +393,7 @@ def main():
         combo_genero.delete(0,END)
         llena_combo()
     
+
     def actualiza_peliculas():
         global peliculas
         
@@ -416,26 +413,29 @@ def main():
         tabla_peliculas.delete(*tabla_peliculas.get_children())
         llena_peliculas()
 
-    '''funciones evento - hover'''
+
+    #FUNCIONES EVENTO 'HOVER'
     def enter(e):
         e.widget['background'] = BTN_HOVER_COLOR
 
     def leave(e):
         e.widget['background'] = BTN_COLOR
     
-    '''funciones evento - focus'''
+
+    #FUNCIONES EVENTO 'FOCUS'
     def focus_in(e):
         search["fg"] = "white"
         if e.widget.get() == "Buscar pelicula":
             search.delete(0,END)
     
+
     def focus_out(e):
         if e.widget.get() == "":
             search["fg"] = LIGHT_TXT_COLOR
             search.insert(END,"Buscar pelicula")
        
     
-    #frame principal
+    '''FRAME PRINCIPAL'''
     app_frame = Frame(root, bg=BG_COLOR)
     
     root.columnconfigure(index=0,weight=1)
@@ -445,28 +445,29 @@ def main():
     
     app_frame.grid(row=0,column=0,sticky="nswe",padx=30,pady=20)
     
-
-    #barra de busqueda
+    
+    '''BARRA DE BÚSQUEDA'''
+    #frame
     search_frame = Frame(app_frame,borderwidth=10,bg=LIGHT_COLOR)
     search_frame.columnconfigure(index=0,weight=1)    
-
+    #entry
     search = Entry(search_frame,bg=LIGHT_COLOR,bd=0,fg=LIGHT_TXT_COLOR)
     search["font"] = ("Calibri",13)
     search.insert(END,"Buscar pelicula")
-    
+    #boton
     search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR,cursor="hand2")
     
-    #barra de busqueda - posicionamiento
+    #POSICIONAMIENTO DE WIDGETS
     search_frame.grid(row=0,column=0, columnspan=3,sticky="nswe")
     search.grid(row=0,column=0,columnspan=3,sticky="nswe")
     search_button.grid(row=0, column=1)
     
-    
-    #botones - home
+    '''BOTONES PRINCIPALES'''
+    #VOLVER AL MENU PRINCIPAL
     home_button = Button(app_frame,image=home_icon,bg=BG_COLOR,bd=0,state="disabled",activebackground=BG_COLOR,command=volver_home)
     home_button.grid(row=2,column=0,sticky="w")
 
-    #botones - añadir pelicula y genero
+    #AÑADIR GENERO Y PELICULA
     button_font = font.Font(size=12,family="Arial",weight="bold")
 
     button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2",command=actualiza_peliculas)
@@ -477,12 +478,12 @@ def main():
     button_gen["font"] = button_font
     button_gen.grid(row=2,column=2,sticky="we",padx=30,pady=(80,60))
     
-    
-    #filtros - boton
+    '''FILTROS'''
+    #BOTÓN DE FILTROS
     button_filt = Button(app_frame,text="Filtros",bg=LIGHT_COLOR,fg=TXT_COLOR,border=0,height=2,command=menu_filtros,image=filtros_icon,compound="right",padx=10,activebackground=LIGHT_COLOR,activeforeground="white",cursor="hand2")
     button_filt["font"] = ("Calibri", 13)
      
-    #filtros - menu
+    #MENÚ DE FILTROS (FILTROS PRINCIPALES)
     filtros_frame = Frame(app_frame,bg=LIGHT_COLOR)
     filtros_frame.columnconfigure(index=1, weight=1)
     
@@ -492,30 +493,30 @@ def main():
     valoracion_txt = Label(filtros_frame,text="Valoracion",fg="white",bg=LIGHT_COLOR)
     valoracion_txt["font"] = ("Calibri",15)
 
-    #filtros - combobox genero
+    #COMBOBOX GÉNERO
     combo_genero = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_genero["state"] = "readonly"
     combo_genero.set("<Cualquiera>")
     llena_combo() #llena el combobox con los generos
     
-    #filtros -combobox valoracion
+    #COMBOBOX VALORACIÓN
     combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_valoracion["state"] = "readonly"
     combo_valoracion.set("<Cualquiera>")
     combo_valoracion["values"] = ("<Cualquiera>",1,2,3,4,5)
 
-    #filtros - posicionamiento
+    #POSICIONAMIENTO DE LOS WIDGETS
     button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))
     genero_txt.grid(row=0,column=0,padx=(30,0),pady=45,sticky="w")
     combo_genero.grid(row=0,column=1,pady=45,padx=(0,30),sticky="nswe")
     valoracion_txt.grid(row=1,column=0, sticky="w",padx=(30,20))
     combo_valoracion.grid(row=1,column=1,padx=(0,30),sticky="nswe")
     
-    
-    #seccion de generos - boton
+    '''----------SECCIÓN VISTA DE ÁRBOL: 'GÉNEROS'---------'''
+    #BOTÓN
     arbol_generos_btn = Button(app_frame,image=genre_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_generos)
     
-    #seccion de generos - titulo y contenedor
+    #TÍTULO Y CONTENEDOR
     generos_titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
     generos_titulo["font"] = ("Calibri", 32)
     
@@ -523,34 +524,34 @@ def main():
     generos_frame.columnconfigure(index=0, weight=1)
     generos_frame.rowconfigure(index=0, weight=1)
     
-    #seccion de generos - arbol de generos
+    #ÁRBOL DE GÉNEROS
     arbol_generos = ttk.Treeview(generos_frame,style="nodotbox.Treeview")
     arbol_generos.columnconfigure(index=0, weight=1)
     arbol_generos.rowconfigure(index=0, weight=1)
-    llena_arbol() #llena el arbol con los generos
+    llena_arbol() #Llena el arbol con los generos
     
-    #seccion de generos - scrollbar
+    #SCROLLBAR
     arbol_scrollbar = AutoScrollbar(arbol_generos,command=arbol_generos.yview,orient="vertical")
     arbol_generos.configure(yscrollcommand=arbol_scrollbar.set)
     
-    #seccion de generos - posicionamiento
+    #POSICIONAMIENTO DE LOS WIDGETS
     generos_titulo.grid(row=3,column=0,sticky="w",pady=(0,20))
     generos_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
     arbol_scrollbar.grid(row=0,column=0,sticky="nse")
     arbol_generos.grid(row=0,column=0, sticky="nswe",padx=(10,0))
     
-    
-    #seccion de peliculas - boton
+    '''------------SECCIÓN 'PELÍCULAS'------------'''
+    #BOTÓN
     lista_peliculas_btn = Button(app_frame,image=movie_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_peliculas)
     lista_peliculas_btn.grid(row=3,column=3,sticky="e",pady=(0,30))
     
-    #seccion de peliculas - frame y texto
+    #FRAME Y TEXTO
     peliculas_titulo = Label(app_frame,text="Peliculas",bg=BG_COLOR,fg=TXT_COLOR,font=("Calibri",32))
     peliculas_frame = Frame(app_frame,bg=BG_COLOR)
     peliculas_frame.columnconfigure(index=0,weight=1)
     peliculas_frame.rowconfigure(index=0,weight=1)
     
-    #seccion de peliculas - tabla
+    #TABLA
     tabla_columnas = ("Nombre","Director","Genero","Año","Valoracion")
     
     tabla_peliculas = ttk.Treeview(peliculas_frame, columns=tabla_columnas, show="headings")
@@ -569,18 +570,18 @@ def main():
     tabla_peliculas.heading("Genero", text="Genero",anchor="w")
     tabla_peliculas.heading("Valoracion", text="Valoracion",anchor="center")
     
-    llena_peliculas() #llena la tabla de peliculas con las peliculas
+    llena_peliculas() #Llena la tabla de peliculas con las peliculas
     
-    #seccion de peliculas - scrollbar
+    #SCROLLBAR
     tabla_peliculas_scrollbar = AutoScrollbar(tabla_peliculas,command=tabla_peliculas.yview,orient="vertical")
     tabla_peliculas.configure(yscrollcommand=tabla_peliculas_scrollbar.set)
     
-    #seccion de peliculas - posicionamiento
+    #POSICIONAMIENTO DE LOS WIDGETS
     tabla_peliculas.grid(row=0,column=0,sticky="nswe")
     tabla_peliculas_scrollbar.grid(row=0,column=0,sticky="nse")
     
-    
-    #resultados busqueda - frame y texto
+    '''--------RESULTADOS DE BÚSQUEDA--------'''
+    #FRAME Y TEXTO
     resultados_frame = Frame(app_frame,bg=BG_COLOR)
     resultados_frame.columnconfigure(index=0,weight=1)
     resultados_frame.rowconfigure(index=0,weight=1)
@@ -588,7 +589,7 @@ def main():
     numero_resultados = Label(app_frame,bg=BG_COLOR,fg="white")
     numero_resultados["font"] = ("Calibri",16)
 
-    #resultados busqueda - tabla 
+    #TABLA CON TÍTULO, AUTOR, GÉNERO, AÑO Y VALORACIÓN
     resultados = ttk.Treeview(resultados_frame, columns=tabla_columnas, show="headings")
     resultados.columnconfigure(index=0,weight=1)
     resultados.rowconfigure(index=0,weight=1)
@@ -605,16 +606,16 @@ def main():
     resultados.heading("Genero", text="Genero",anchor="w")
     resultados.heading("Valoracion", text="Valoracion",anchor="center")
 
-    #resultados busqueda - scrollbar
+    #SCROLLBAR
     resultados_scrollbar = AutoScrollbar(resultados,command=resultados.yview,orient="vertical")
     resultados.configure(yscrollcommand=resultados_scrollbar.set)
     
-    #resultados busqueda - posicionamiento
+    #POSICIONAMIENTO DE LOS WIDGETS
     resultados.grid(row=0,column=0,sticky="nswe")
     resultados_scrollbar.grid(row=0,column=0,sticky="nse")
     
-
-    #eventos
+    '''------------------------------------------------------'''
+    #Eventos secundarios
     button_gen.bind("<Enter>",enter)
     button_gen.bind("<Leave>",leave)
     
@@ -625,7 +626,8 @@ def main():
     search.bind("<FocusOut>",focus_out)
 
     search.bind("<Return>",busqueda)
-    #mainloop
+
+    #Mainloop
     root.mainloop()
    
 main()

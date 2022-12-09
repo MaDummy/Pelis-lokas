@@ -20,30 +20,22 @@ def anadir_genero(gen_window,enter,leave):
                 gp_existe = True
 
             if gp_existe and genero_ingresado.lower() == genero[0].lower() or genero_ingresado.lower() ==  genero[1].lower(): #Si el genero padre existe y el genero ingresado también, printea que ya existe.
-                rect = Frame(main_frame,width=700,height=100,bg="#222831") #Rectangulo para ocultar el mensaje anterior
-                rect.place(relx=0.2)
-                msg = Label(main_frame, text="El género ya existe.", bg="#222831",fg="white") #Mensaje de error
-                msg["font"] = ("Calibri", 20)
-                msg.place(relx=0.43)
+                msg["text"] = "El género ya existe."
+                msg.place(relx=0.415)
                 break
 
             if lista_generos.index(genero) == len(lista_generos)-1 and gp_existe: #Una vez ya haya revisado toda la lista de generos, si el genero ingresado
                 lista_generos.append([genero_ingresado, genero_padre])      #sigue sin existir, entonces lo ingresa a la lista de generos y al archivo csv.
                 archivo_generos.write(f'“{genero_ingresado.capitalize()}”, “{genero_padre.capitalize()}”\n')
                 
-                rect = Frame(main_frame,width=700,height=100,bg="#222831") #rectangulo para ocultar el mensaje anterior
-                rect.place(relx=0.2)
-                msg = Label(main_frame, text="Se ha ingresado con exito", bg="#222831",fg="white") #mensaje
-                msg["font"] = ("Calibri", 20)
+                msg["text"] = "Se ha ingresado con exito"
+                msg.place_forget()
                 msg.place(relx=0.385)
-            
                 break #Como a la lista de generos se le añade un indice más, revisará la lista en el nuevo índice. Para evitar esto, puse un break.
 
             if lista_generos.index(genero) == len(lista_generos)-1 and not gp_existe: #Si al revisar la lista de generos, el genero padre sigue sin existir,          
-                rect = Frame(main_frame,width=700,height=100,bg="#222831") #rectangulo para ocultar el mensaje anterior
-                rect.place(relx=0.2)
-                msg = Label(main_frame, text="El género padre no existe.", bg="#222831",fg="white") #mensaje
-                msg["font"] = ("Calibri", 20)
+                msg["text"] = "El género padre no existe."
+                msg.place_forget()
                 msg.place(relx=0.385)
 
 
@@ -71,6 +63,10 @@ def anadir_genero(gen_window,enter,leave):
     main_frame = Frame(gen_window,bg="#222831") #se define el frame donde ira el contenido
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=(40,0))
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
+
+    #mensaje
+    msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
+    msg["font"] = ("Calibri", 20)
 
     #texto
     genero_padre_txt = Label(main_frame, text="Genero Padre", bg="#222831", fg="white")

@@ -35,23 +35,33 @@ def anadir_pelicula(pel_window,enter,leave):
 
     def valida_pelicula(titulo: str, director: str, genero: str, ano: str, valoracion: str) -> bool:
         if titulo == '' or director == '' or genero == '' or ano == '' or valoracion == '':
-            print("Falta algun tipo de dato. Intente nuevamente.")
+            msg["text"] = "Falta algun tipo de dato. Intente nuevamente."            
+            msg.place_forget()
+            msg.place(relx=0.27)
             return False
         
         if not valida_ano(ano):
-            print("No se pudo agregar la película, el año no es valido")
+            msg["text"] = "No se pudo agregar la película, el año no es valido"
+            msg.place_forget()
+            msg.place(relx=0.25)
             return False
 
         if not valida_valoracion(valoracion):
-            print("No se pudo agregar la pelicula, la valoración no es valida")
+            msg["text"] = "No se pudo agregar la pelicula, la valoración no es valida"
+            msg.place_forget()
+            msg.place(relx=0.25)
             return False
         
         if not valida_genero(genero):
-            print("No se pudo agregar la pelicula, el genero no existe")
+            msg["text"] = "No se pudo agregar la pelicula, el genero no existe"
+            msg.place_forget()
+            msg.place(relx=0.25)
             return False
         
         if valida_repeticion(titulo, director):
-            print("La película ya existe")
+            msg["text"] = "La película ya existe"
+            msg.place_forget()
+            msg.place(relx=0.4)
             return False
 
         return True
@@ -86,6 +96,9 @@ def anadir_pelicula(pel_window,enter,leave):
             lista_peliculas.append(pelicula)
 
             archivo_peliculas.write(f'“{titulo.title()}”, “{director.title()}”, “{genero.capitalize()}”, {ano}, {valoracion}”\n')
+            msg["text"] = "La película se ha ingresado con exito"
+            msg.place_forget()
+            msg.place(relx=0.4)
   
     '''------------------------------------------------INTERFAZ GRÁFICA------------------------------------------------'''
 
@@ -111,6 +124,10 @@ def anadir_pelicula(pel_window,enter,leave):
     main_frame.grid(row=0,column=0,sticky="nswe",padx=70,pady=50)
     main_frame.columnconfigure(index=1,weight=1) #para que se expanda el contenido del frame
 
+    #mensaje
+    msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
+    msg["font"] = ("Calibri", 20)
+    
     '''TEXTOS'''
 
     titulo_txt = Label(main_frame, text="Titulo", bg="#222831", fg="white")
@@ -132,23 +149,19 @@ def anadir_pelicula(pel_window,enter,leave):
 
     entry_frame_titulo = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_padre
     entry_frame_titulo.columnconfigure(index=0, weight=1)    
-    entry_frame_titulo.grid(row=0, column=1, pady=(50,0),sticky="we")
-
+    
     entry_frame_director = Frame(main_frame,bd=13,bg="#3A4750") #para agregarle padding a entry_director
     entry_frame_director.columnconfigure(index=0, weight=1)    
-    entry_frame_director.grid(row=1, column=1, sticky="we",pady=(40,0))
-
+    
     entry_frame_ano = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_ano
     entry_frame_ano.columnconfigure(index=0, weight=1)    
-    entry_frame_ano.grid(row=2, column=1, pady=(40,0),sticky="we")
-
+    
     entry_frame_genero = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_genero
     entry_frame_genero.columnconfigure(index=0, weight=1)    
-    entry_frame_genero.grid(row=3, column=1, pady=(40,0),sticky="we")
-
+    
     entry_frame_valoracion = Frame(main_frame, bd=13, bg="#3A4750") #para agregarle padding a entry_valoracion
     entry_frame_valoracion.columnconfigure(index=0, weight=1)    
-    entry_frame_valoracion.grid(row=4, column=1, pady=(40,0),sticky="we")
+    
 
     '''SE DEFINEN LAS ENTRADAS DE TEXTO'''
 
@@ -169,19 +182,24 @@ def anadir_pelicula(pel_window,enter,leave):
 
     '''SE POSICIONAN LAS CAJAS DE TEXTO Y SUS ENTRADAS CORRESPONDIENTES'''
 
-    titulo_txt.grid(row=0, column=0, sticky="w",pady=(50,0))
+    titulo_txt.grid(row=0, column=0, sticky="w",pady=(80,0))
+    entry_frame_titulo.grid(row=0, column=1, pady=(80,0),sticky="we")
     entry_titulo.grid(row=0, column=0, sticky="nswe")
 
     director_txt.grid(row=1, column=0, sticky="w",pady=(40,0))
+    entry_frame_director.grid(row=1, column=1, sticky="we",pady=(40,0))
     entry_director.grid(row=0, column=0, sticky="nswe")
 
     ano_txt.grid(row=2, column=0, sticky="w",pady=(40,0))
+    entry_frame_ano.grid(row=2, column=1,sticky="we",pady=(40,0))
     entry_ano.grid(row=0, column=0, sticky="nswe")
 
     genero_txt.grid(row=3, column=0, sticky="w",pady=(40,0))
+    entry_frame_genero.grid(row=3, column=1,sticky="we",pady=(40,0))
     entry_genero.grid(row=0, column=0, sticky="nswe")
 
-    valoracion_txt.grid(row=4, column=0, sticky="w",pady=(40,0),padx=(0,25))
+    valoracion_txt.grid(row=4, column=0, sticky="w",pady=40,padx=(0,25))
+    entry_frame_valoracion.grid(row=4, column=1,sticky="we")
     entry_valoracion.grid(row=0, column=0, sticky="nswe")
 
     '''BOTONES'''

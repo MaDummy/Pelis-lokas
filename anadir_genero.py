@@ -5,13 +5,8 @@ from crea_lista import crea_lista
 def anadir_genero(gen_window,enter,leave):
     
     #archivo generos
-    archivo_generos = "generos.csv" #Se abre el archivo de generos una sola vez, para leerlo y generar una lista "generos"
-    
-    generos = crea_lista(archivo_generos)                                                                      
-
-    def cancelar():
-        '''FUNCION CANCELAR'''
-        gen_window.destroy() #Destruye el programa, lo cierra.
+    archivo_generos = "generos.csv" #Se crea una variable con el nombre del archivo a leer.
+    generos = crea_lista(archivo_generos) #Se crea una lista con los géneros.                                                                      
 
     def subgenero():
         '''FUNCION QUE AÑADE SUBGENEROS'''
@@ -59,8 +54,22 @@ def anadir_genero(gen_window,enter,leave):
 
 
     #Interfaz Grafica
-    
-    gen_window.geometry("1074x710") #Se establece el alto y ancho de la ventana.
+
+
+    '''PARA CENTRAR LA VENTANA'''
+    largo = gen_window.winfo_screenwidth()
+    altura = gen_window.winfo_screenheight()
+
+    borde_x = int((largo/2) - (1074/2))
+    borde_y = int((altura/2) - (550/2))
+
+    gen_window.geometry("{}x{}+{}+{}".format(
+        1074, 
+        550, 
+        borde_x, 
+        borde_y))
+    '''PARA CENTRAR LA VENTANA'''
+
     gen_window.configure(bg ="#222831") #El color del fondo
     gen_window.columnconfigure(index=0, weight=1) #para que el frame principal se expanda horizontalmente
     gen_window.rowconfigure(index=0, weight=1) #para que el frame principal se expanda verticalmente
@@ -109,7 +118,7 @@ def anadir_genero(gen_window,enter,leave):
 
     #Se crea el botón para cancelar
     btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #frame donde va el boton cancelar
-    btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15, command=cancelar,activebackground="#262C35",activeforeground="white",cursor="hand2")
+    btn_cancelar = Button(btn_cancelar_frame, bg="#262C35", text="Cancelar", fg="white", padx=90, bd=0, pady=15, command=gen_window.destroy,activebackground="#262C35",activeforeground="white",cursor="hand2")
     btn_cancelar["font"] = button_font
 
     btn_cancelar_frame.grid(row=0, column=0,padx=(0,60))

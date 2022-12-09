@@ -5,10 +5,8 @@ def crea_lista(archivo):
     arch_datos.close()
 
     if datos[len(datos)-1][len(datos[len(datos)-1])-1:] != '\n': #Verifica si el ultimo indice(str) del ultimo indice(list) es '\n'.
-        print("No hay salto de linea")
         with open(archivo, 'a', encoding = 'utf-8') as arch:
-            arch.write('\n')
-            print("Ahora hay un salto de linea")
+            arch.write('\n') #Si el ultimo indice no es un salto de línea, por conveniencia, se le añade uno.
 
     for i in range(len(datos)):
         datos[i] = datos[i].replace("\n","")

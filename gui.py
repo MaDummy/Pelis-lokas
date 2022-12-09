@@ -3,12 +3,27 @@ from tkinter import ttk
 import tkinter.font as font
 from crea_lista import crea_lista
 from anadir_genero import anadir_genero
-from anadir_pelicula import anadir_pelicula
+from anadir_pelicula import ventana_anadir_peli
 
 root = Tk()
+
+'''PARA CENTRAR LA VENTANA'''
+largo = root.winfo_screenwidth()
+altura = root.winfo_screenheight()
+
+borde_x = int((largo/2) - (1074/2))
+borde_y = int((altura/2) - (700/2))
+
+root.geometry("{}x{}+{}+{}".format(
+    1074, 
+    700, 
+    borde_x, 
+    borde_y))
+'''PARA CENTRAR LA VENTANA'''
+
 root.update()
 root.configure(bg="#222831")
-root.geometry("1080x720")
+
 
 #archivos
 archivo_generos = "generos.csv"
@@ -75,7 +90,7 @@ style.layout(
 
 style.configure("Mystyle.TCombobox",relief= "flat", borderwidth=0,highlightthickness=0)
 
-#styles - treeview
+#Styles - Vista de árbol
 style.layout('nodotbox.Treeview.Item', 
              [('Treeitem.padding',
                {'children': [('Treeitem.indicator', {'side': 'left', 'sticky': ''}),
@@ -98,11 +113,11 @@ style.map("Treeview.Heading", background=[("hover", "none")])
 style.map("Treeview", background=[("selected", BTN_COLOR)])
 style.map("Treeview",relief=[("selected","flat")])
 
-#styles - scrollbar
+#Styles - Scrollbar
 style.configure("Vertical.TScrollbar",background=LIGHT_COLOR,arrowcolor="white")
 style.map("Vertical.TScrollbar",background=[("hover",BG_COLOR)])
 
-#scrollbar
+#Scrollbar
 class AutoScrollbar(ttk.Scrollbar):
     def set(self, low, high):
         if float(low) <= 0.0 and float(high) >= 1.0:
@@ -111,7 +126,7 @@ class AutoScrollbar(ttk.Scrollbar):
             self.grid()
         Scrollbar.set(self, low, high)
 
-#funciones
+'''----------FUNCIONES-----------'''
 
 #funcion principal
 def main(): 
@@ -139,10 +154,10 @@ def main():
         #cambia su estado a 0 (cerrado)
         filtros_estado = 0
     
-    #funciones encargadas de desplegar el arbol de generos y la tabla de peliculas
+    '''Funciones encargadas de desplegar el arbol de generos y la tabla de peliculas'''
 
     def despliega_generos():
-        #modifica el estilo del arbol de generos
+        #Modifica el estilo del arbol de generos
         style.configure("Treeview", 
             font=("Calibri",17),
             background=LIGHT_COLOR,
@@ -166,7 +181,7 @@ def main():
         
     
     def despliega_peliculas():
-        #modifica el estilo de la tabla de peliculas
+        #Modifica el estilo de la tabla de peliculas
         style.configure("Treeview", 
             font=("Calibri",14),
             background="#283039",
@@ -184,7 +199,7 @@ def main():
         peliculas_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
         peliculas_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
          
-    #funciones encargadas de llenar las distintas tablas del programa
+    #Funciones encargadas de llenar las distintas tablas del programa
     def llena_peliculas():
         for pelicula in peliculas:
             tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
@@ -197,7 +212,7 @@ def main():
     def llena_combo():
         combo_values = []
         for genero1 in generos:
-            if genero1[0] not in combo_values:
+            if genero1[0] not in combo_values: #Añade el genero una sola vez al combo
                 combo_values.append(genero1[0].capitalize())
         combo_genero["values"] = tuple(combo_values)
     
@@ -252,13 +267,26 @@ def main():
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
                    lista_resultados.append(pelicula)
         
+        if genero != "<Cualquiera>" and valoracion == "<Cualquiera>":
+            for dupla_generos in generos: #Se recorren los géneros con la variable "género" equivalente a una lista que contiene al género y su género padre.
+                if genero.lower() == dupla_generos[0].lower() or genero.lower() == dupla_generos[1].lower():
+                    for subgenero in generos: #Se recorren los subgéneros correspondientes a ese género, por ejemplo "Romance" o "Acción".
+                        if subgenero[1].lower() == genero.lower(): #Si "Romance" es el género padre de la lista "genero".
+                            for pelicula in peliculas: #Se recorren las peliculas con la variable "pelicula", correspondiente a una lista con sus datos.
+                                if pelicula[2].lower() == subgenero[0].lower(): #Si la pelicula, en su segundo índice (género), corresponde al subgénero del género buscado
+                                    lista_resultados.append(pelicula) #Añade la película a la lista con los resultados.
+
+                    for pelicula in peliculas: #Luego, recorre las peliculas asociadas al género especifico. Si fuera "Acción", buscaría la película asociada al género "Acción".
+                        if pelicula[2].lower() == genero.lower(): #Si la película, en su segundo índice, corresponde al género a buscar
+                            lista_resultados.append(pelicula) #Se añade la película
+                    break
         
         #numero resultados
         numero_resultados["text"] = f"Se han encontrado {len(lista_resultados)} resultados"
         
         #inserta los resultados en la tabla
         for resultado in lista_resultados:
-            resultados.insert("","end",values=(resultado[0].capitalize(),resultado[1].title(),resultado[2].capitalize(),resultado[3],resultado[4] + "/5"))
+            resultados.insert("","end",values=(resultado[0].capitalize(),resultado[1].title(),resultado[2].capitalize(),str(resultado[3]),str(resultado[4]) + "/5"))
         
         #muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
@@ -341,7 +369,7 @@ def main():
         #se define la nueva pantalla
         pel_window = Toplevel(root)
         #llama a la funcion anadir_genero, que crea la nueva ventana
-        anadir_pelicula(pel_window,enter,leave)
+        ventana_anadir_peli(pel_window,enter,leave)
         
         #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
         pel_window.grab_set()

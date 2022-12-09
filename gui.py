@@ -210,7 +210,7 @@ def main():
             arbol_generos.insert(genero[1].lower(),"end",genero[0].lower(),text=genero[0].capitalize())
     
     def llena_combo():
-        combo_values = []
+        combo_values = ["<Cualquiera>"]
         for genero1 in generos:
             if genero1[0] not in combo_values: #Añade el genero una sola vez al combo
                 combo_values.append(genero1[0].capitalize())
@@ -469,7 +469,7 @@ def main():
     combo_valoracion = ttk.Combobox(filtros_frame,font=("Calibri",13),justify="center",style="Mystyle.TCombobox")
     combo_valoracion["state"] = "readonly"
     combo_valoracion.set("<Cualquiera>")
-    combo_valoracion["values"] = (1,2,3,4,5)
+    combo_valoracion["values"] = ("<Cualquiera>",1,2,3,4,5)
 
     #filtros - posicionamiento
     button_filt.grid(row=0,column=3,sticky="nswe",padx=(30,0))

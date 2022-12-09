@@ -237,11 +237,11 @@ def main():
         #activa el boton home
         home_button["state"] = "active"
         home_button["cursor"] = "hand2"
-        
+
         #elimina boton para cambiar entre peliculas y generos
         lista_peliculas_btn.grid_remove()
         arbol_generos_btn.grid_remove()
-        
+
         #elimina el arbol de generos o tabla de peliculas
         peliculas_titulo.grid_remove()
         peliculas_frame.grid_remove()
@@ -255,32 +255,62 @@ def main():
         nombre = search.get()
         
         if nombre == "Buscar pelicula":
-            nombre = ""
-        
+            nombre = ''
+
         if genero == "<Cualquiera>" and valoracion != "<Cualquiera>":
+            pelis_nom = []
             for pelicula in peliculas:
+                if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
+                    pelis_nom.append(pelicula)
+
+            for pelicula in pelis_nom:
                 if pelicula[4] == valoracion:
                     lista_resultados.append(pelicula)
-        
-        if genero == "<Cualquiera>" and valoracion == "<Cualquiera>":
+
+        if genero == "<Cualquiera>" and valoracion == "<Cualquiera>": #Caso en el que se busque solo por el nombre
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
                    lista_resultados.append(pelicula)
         
         if genero != "<Cualquiera>" and valoracion == "<Cualquiera>":
+            pelis_nom = []
+            for pelicula in peliculas:
+                if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
+                    pelis_nom.append(pelicula)
+
             for dupla_generos in generos: #Se recorren los géneros con la variable "género" equivalente a una lista que contiene al género y su género padre.
                 if genero.lower() == dupla_generos[0].lower() or genero.lower() == dupla_generos[1].lower():
                     for subgenero in generos: #Se recorren los subgéneros correspondientes a ese género, por ejemplo "Romance" o "Acción".
                         if subgenero[1].lower() == genero.lower(): #Si "Romance" es el género padre de la lista "genero".
-                            for pelicula in peliculas: #Se recorren las peliculas con la variable "pelicula", correspondiente a una lista con sus datos.
+                            for pelicula in pelis_nom: #Se recorren las peliculas con la variable "pelicula", correspondiente a una lista con sus datos.
                                 if pelicula[2].lower() == subgenero[0].lower(): #Si la pelicula, en su segundo índice (género), corresponde al subgénero del género buscado
                                     lista_resultados.append(pelicula) #Añade la película a la lista con los resultados.
 
-                    for pelicula in peliculas: #Luego, recorre las peliculas asociadas al género especifico. Si fuera "Acción", buscaría la película asociada al género "Acción".
+                    for pelicula in pelis_nom: #Luego, recorre las peliculas asociadas al género especifico. Si fuera "Acción", buscaría la película asociada al género "Acción".
                         if pelicula[2].lower() == genero.lower(): #Si la película, en su segundo índice, corresponde al género a buscar
                             lista_resultados.append(pelicula) #Se añade la película
                     break
-        
+
+        if genero != "<Cualquiera>" and valoracion != "<Cualquiera>":
+            pelis_nom = []
+            for pelicula in peliculas:
+                if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
+                    if pelicula[4] == valoracion:
+                        pelis_nom.append(pelicula)
+
+            for dupla_generos in generos: #Se recorren los géneros con la variable "género" equivalente a una lista que contiene al género y su género padre.
+                if genero.lower() == dupla_generos[0].lower() or genero.lower() == dupla_generos[1].lower():
+                    for subgenero in generos: #Se recorren los subgéneros correspondientes a ese género, por ejemplo "Romance" o "Acción".
+                        if subgenero[1].lower() == genero.lower(): #Si "Romance" es el género padre de la lista "genero".
+                            for pelicula in pelis_nom: #Se recorren las peliculas con la variable "pelicula", correspondiente a una lista con sus datos.
+                                if pelicula[2].lower() == subgenero[0].lower(): #Si la pelicula, en su segundo índice (género), corresponde al subgénero del género buscado
+                                    lista_resultados.append(pelicula) #Añade la película a la lista con los resultados.
+
+                    for pelicula in pelis_nom: #Luego, recorre las peliculas asociadas al género especifico. Si fuera "Acción", buscaría la película asociada al género "Acción".
+                        if pelicula[2].lower() == genero.lower(): #Si la película, en su segundo índice, corresponde al género a buscar
+                            lista_resultados.append(pelicula) #Se añade la película
+                    break
+
         #numero resultados
         numero_resultados["text"] = f"Se han encontrado {len(lista_resultados)} resultados"
         

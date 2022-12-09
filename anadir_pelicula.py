@@ -107,11 +107,11 @@ def anadir_pelicula(pel_window,enter,leave):
     altura = pel_window.winfo_screenheight()
 
     borde_x = int((largo/2) - (1074/2))
-    borde_y = int((altura/2) - (800/2))
+    borde_y = int((altura/2) - (700/2))
 
     pel_window.geometry("{}x{}+{}+{}".format(
         1074, 
-        800, 
+        700, 
         borde_x, 
         borde_y))
     '''PARA CENTRAR LA VENTANA'''

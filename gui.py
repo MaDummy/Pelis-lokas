@@ -126,10 +126,11 @@ class AutoScrollbar(ttk.Scrollbar):
             self.grid()
         Scrollbar.set(self, low, high)
 
-'''----------FUNCIONES-----------'''
+'''----------FUNCIÓN PRINCIPAL-----------'''
 
 #funcion principal
 def main(): 
+    '''---------SUB-FUNCIONES PRINCIPALES---------'''
     #funciones encargadas de abrir y cerrar el menú de filtros
     def menu_filtros():
         global filtros_estado
@@ -179,7 +180,7 @@ def main():
         generos_titulo.grid(row=3,column=0,sticky="w",pady=(0,30))
         generos_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
         
-    
+    '''---FUNCIÓN QUE DESPLIEGA PELÍCULAS---'''
     def despliega_peliculas():
         #Modifica el estilo de la tabla de peliculas
         style.configure("Treeview", 
@@ -217,7 +218,7 @@ def main():
         combo_genero["values"] = tuple(combo_values)
     
     
-    #funcion de busqueda de peliculas
+    '''---FUNCIÓN BÚSQUEDA DE PELÍCULAS---'''
     def busqueda():
         global filtros_estado
         
@@ -257,7 +258,7 @@ def main():
         if nombre == "Buscar pelicula":
             nombre = ''
 
-        if genero == "<Cualquiera>" and valoracion != "<Cualquiera>":
+        if genero == "<Cualquiera>" and valoracion != "<Cualquiera>": #Caso en el que se busque por valoración y nombre
             pelis_nom = []
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
@@ -272,7 +273,7 @@ def main():
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
                    lista_resultados.append(pelicula)
         
-        if genero != "<Cualquiera>" and valoracion == "<Cualquiera>":
+        if genero != "<Cualquiera>" and valoracion == "<Cualquiera>": #Caso en el que se busque por género y nombre
             pelis_nom = []
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
@@ -291,41 +292,41 @@ def main():
                             lista_resultados.append(pelicula) #Se añade la película
                     break
 
-        if genero != "<Cualquiera>" and valoracion != "<Cualquiera>":
+        if genero != "<Cualquiera>" and valoracion != "<Cualquiera>": #Caso en el que se busque por valoración, género y nombre.
             pelis_nom = []
             for pelicula in peliculas:
                 if nombre.lower() in pelicula[0].lower() or nombre.lower() in pelicula[1].lower():
                     if pelicula[4] == valoracion:
                         pelis_nom.append(pelicula)
 
-            for dupla_generos in generos: #Se recorren los géneros con la variable "género" equivalente a una lista que contiene al género y su género padre.
+            for dupla_generos in generos: #Mismo proceso que en búsqueda por género y nombre.
                 if genero.lower() == dupla_generos[0].lower() or genero.lower() == dupla_generos[1].lower():
-                    for subgenero in generos: #Se recorren los subgéneros correspondientes a ese género, por ejemplo "Romance" o "Acción".
-                        if subgenero[1].lower() == genero.lower(): #Si "Romance" es el género padre de la lista "genero".
-                            for pelicula in pelis_nom: #Se recorren las peliculas con la variable "pelicula", correspondiente a una lista con sus datos.
-                                if pelicula[2].lower() == subgenero[0].lower(): #Si la pelicula, en su segundo índice (género), corresponde al subgénero del género buscado
-                                    lista_resultados.append(pelicula) #Añade la película a la lista con los resultados.
+                    for subgenero in generos:
+                        if subgenero[1].lower() == genero.lower():
+                            for pelicula in pelis_nom:
+                                if pelicula[2].lower() == subgenero[0].lower():
+                                    lista_resultados.append(pelicula)
 
-                    for pelicula in pelis_nom: #Luego, recorre las peliculas asociadas al género especifico. Si fuera "Acción", buscaría la película asociada al género "Acción".
-                        if pelicula[2].lower() == genero.lower(): #Si la película, en su segundo índice, corresponde al género a buscar
-                            lista_resultados.append(pelicula) #Se añade la película
+                    for pelicula in pelis_nom:
+                        if pelicula[2].lower() == genero.lower():
+                            lista_resultados.append(pelicula)
                     break
 
-        #numero resultados
+        #Numero resultados
         numero_resultados["text"] = f"Se han encontrado {len(lista_resultados)} resultados"
         
-        #inserta los resultados en la tabla
+        #Inserta los resultados en la tabla
         for resultado in lista_resultados:
             resultados.insert("","end",values=(resultado[0].capitalize(),resultado[1].title(),resultado[2].capitalize(),str(resultado[3]),str(resultado[4]) + "/5"))
         
-        #muestra la tabla con los resultados
+        #Muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
         resultados_frame.grid(row=4,column=0,columnspan=4,sticky="nswe")
         
-        #cierra los filtros
+        #Cierra los filtros
         cierra_filtros()
     
-    #funciones de limpieza
+    #Funciones de limpieza
     def limpia_filtros():
         combo_genero.set("<Cualquiera>")
         combo_valoracion.set("<Cualquiera>")
@@ -333,9 +334,9 @@ def main():
     def limpia_resultados():
         resultados.delete(*resultados.get_children())
             
-    #funcion que permite al usuario volver al menú principal
+    #Funcion que permite al usuario volver al menú principal
     def volver_home():
-        #modifica el estilo del arbol de generos
+        #Modifica el estilo del arbol de generos
         style.configure("Treeview", 
             font=("Calibri",17),
             background=LIGHT_COLOR,

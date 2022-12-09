@@ -203,7 +203,7 @@ def main():
     #Funciones encargadas de llenar las distintas tablas del programa
     def llena_peliculas():
         for pelicula in peliculas:
-            tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
+            tabla_peliculas.insert("","end",values=(pelicula[0].title(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
     
     def llena_arbol():
         arbol_generos.insert("", "end","general",text="General")
@@ -317,7 +317,7 @@ def main():
         
         #Inserta los resultados en la tabla
         for resultado in lista_resultados:
-            resultados.insert("","end",values=(resultado[0].capitalize(),resultado[1].title(),resultado[2].capitalize(),str(resultado[3]),str(resultado[4]) + "/5"))
+            resultados.insert("","end",values=(resultado[0].title(),resultado[1].title(),resultado[2].capitalize(),str(resultado[3]),str(resultado[4]) + "/5"))
         
         #Muestra la tabla con los resultados
         numero_resultados.grid(row=3,column=0,sticky="w",pady=(0,30))
@@ -625,7 +625,7 @@ def main():
     
     search.bind("<FocusIn>",focus_in)
     search.bind("<FocusOut>",focus_out)
-    
+
     search.bind("<Return>",busqueda)
 
     #Mainloop

@@ -76,8 +76,8 @@ def anadir_pelicula(pel_window,enter,leave):
 
         '''SE RECOGEN LOS TEXTOS INGRESADOS'''
 
-        titulo = entry_titulo.get().strip()
-        director = entry_director.get().strip()
+        titulo = entry_titulo.get().strip().replace(',','‚')
+        director = entry_director.get().strip().replace(',','‚')
         genero = entry_genero.get().strip()
         ano = entry_ano.get().strip()
         valoracion = entry_valoracion.get().strip()

@@ -218,7 +218,7 @@ def main():
     
     
     #funcion de busqueda de peliculas
-    def busqueda():
+    def busqueda(e=""):
         global filtros_estado
         
         #limpia resultados anteriores
@@ -366,6 +366,10 @@ def main():
         limpia_resultados()
         #limpia los filtros
         limpia_filtros()
+        cierra_filtros()
+        #limpia el entry
+        search.delete(0,END)
+        root.focus_set()
     
     
     #funciones de actualizacion (al añadir peliculas y añadir generos)
@@ -619,6 +623,7 @@ def main():
     search.bind("<FocusIn>",focus_in)
     search.bind("<FocusOut>",focus_out)
 
+    search.bind("<Return>",busqueda)
     #mainloop
     root.mainloop()
    

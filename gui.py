@@ -11,8 +11,9 @@ root.configure(bg="#222831")
 root.geometry("1080x720")
 
 #archivos
-archivo_generos = open("generos.csv","r",encoding="utf-8")
-archivo_peliculas = open("peliculas.csv","r",encoding="utf-8")
+archivo_generos = "generos.csv"
+archivo_peliculas = "peliculas.csv"
+
 generos = crea_lista(archivo_generos)
 peliculas = crea_lista(archivo_peliculas)
 
@@ -186,7 +187,7 @@ def main():
     #funciones encargadas de llenar las distintas tablas del programa
     def llena_peliculas():
         for pelicula in peliculas:
-            tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),pelicula[3],pelicula[4] + "/5"))
+            tabla_peliculas.insert("","end",values=(pelicula[0].capitalize(),pelicula[1].title(),pelicula[2].capitalize(),str(pelicula[3]),str(pelicula[4]) + "/5"))
     
     def llena_arbol():
         arbol_generos.insert("", "end","general",text="General")
@@ -316,15 +317,18 @@ def main():
         #se define la nueva pantalla
         gen_window = Toplevel(root)
         #llama a la funcion anadir_genero, que crea la nueva ventana
+
         anadir_genero(gen_window,enter,leave)
-        
         #para que la ventana principal espere a que se cierre la nueva ventana antes de seguir con su ejecucion
+
         gen_window.grab_set()
         root.wait_window(gen_window)
-        
+
         #cuando se cierra la ventana, lee nuevamente el archivo de generos y crea una lista con los generos
-        archivo_generos.seek(0)
-        generos = crea_lista(archivo_generos)
+        with open('generos.csv','r', encoding = 'utf-8') as arch_generos:
+            arch_generos.seek(0)
+            generos = crea_lista(archivo_generos)
+
         #reinicia el arbol de generos y el combobox
         arbol_generos.delete(*arbol_generos.get_children())
         llena_arbol()
@@ -344,8 +348,9 @@ def main():
         root.wait_window(pel_window)
         
         #cuando se cierra la ventana, lee nuevamente el archivo de peliculas y crea una lista con las peliculas
-        archivo_peliculas.seek(0)
-        peliculas = crea_lista(archivo_peliculas)
+        with open(archivo_peliculas, 'r', encoding = 'utf-8') as arch_peliculas:
+            arch_peliculas.seek(0)
+            peliculas = crea_lista(archivo_peliculas)
         #reinicia la tabla de peliculas
         tabla_peliculas.delete(*tabla_peliculas.get_children())
         llena_peliculas()

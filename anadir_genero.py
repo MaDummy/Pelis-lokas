@@ -5,12 +5,9 @@ from crea_lista import crea_lista
 def anadir_genero(gen_window,enter,leave):
     
     #archivo generos
-    arch_generos = open('generos.csv', 'r',encoding="utf-8") #Se abre el archivo de generos una sola vez, para leerlo y generar una lista "generos"
+    archivo_generos = "generos.csv" #Se abre el archivo de generos una sola vez, para leerlo y generar una lista "generos"
     
-    generos = crea_lista(arch_generos)                                                                      
-
-    arch_generos.close()
-
+    generos = crea_lista(archivo_generos)                                                                      
 
     def cancelar():
         '''FUNCION CANCELAR'''
@@ -19,9 +16,9 @@ def anadir_genero(gen_window,enter,leave):
     def subgenero():
         '''FUNCION QUE AÑADE SUBGENEROS'''
 
-        with open('generos.csv', 'a', encoding = "utf-8") as arch_generos: #Abro el archivo de generos.csv para agregarle más géneros, con la extensión append del CRUD.
-            genero_padre = entry_padre.get() #Asigno una variable que toma el valor del género padre escrito.
-            genero_ingresado = entry_genero.get() #Asigno una variable que toma el valor del género ingresado escrito.
+        with open('generos.csv', 'a', encoding = "utf-8") as arch_generos: #Se abre el archivo de generos.csv para agregarle más géneros, con la extensión append del CRUD.
+            genero_padre = entry_padre.get() #Se asigna una variable que toma el valor del género padre escrito.
+            genero_ingresado = entry_genero.get() #Se asigna una variable que toma el valor del género ingresado escrito.
 
             gp_existe = False
 
@@ -30,16 +27,16 @@ def anadir_genero(gen_window,enter,leave):
                     gp_existe = True
 
                 if gp_existe and genero_ingresado in genero: #Si el genero padre existe y el genero ingresado también, printea que ya existe.
-                    rect = Frame(main_frame,width=700,height=100,bg="#222831") #rectangulo para ocultar el mensaje anterior
+                    rect = Frame(main_frame,width=700,height=100,bg="#222831") #Rectangulo para ocultar el mensaje anterior
                     rect.place(relx=0.2)
-                    msg = Label(main_frame, text="El género ya existe.", bg="#222831",fg="white") #mensaje
+                    msg = Label(main_frame, text="El género ya existe.", bg="#222831",fg="white") #Mensaje de error
                     msg["font"] = ("Calibri", 20)
                     msg.place(relx=0.43)
                     break
 
                 if generos.index(genero) == len(generos)-1 and gp_existe: #Una vez ya haya revisado toda la lista de generos, si el genero ingresado
-                    generos.append([genero_ingresado, genero_padre])     #sigue sin existir, entonces lo ingresa a la lista de generos y al archivo csv.
-                    arch_generos.write(f'\n"{genero_ingresado}", "{genero_padre}"')
+                    generos.append([genero_ingresado, genero_padre])      #sigue sin existir, entonces lo ingresa a la lista de generos y al archivo csv.
+                    arch_generos.write(f'“{genero_ingresado}”, “{genero_padre}”\n')
                     
                     rect = Frame(main_frame,width=700,height=100,bg="#222831") #rectangulo para ocultar el mensaje anterior
                     rect.place(relx=0.2)

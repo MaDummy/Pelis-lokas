@@ -2,8 +2,8 @@ from tkinter import *
 import tkinter.font as font
 from crea_lista import crea_lista
 
-def anadir_genero(gen_window,enter,leave):
-    def subgenero(event = None):
+def anadir_genero(gen_window,enter,leave) -> None:
+    def subgenero(event = None) -> None:
         '''FUNCION QUE AÑADE SUBGENEROS'''
         archivo_generos = open("generos.csv","r+",encoding="utf-8") #abre el archivo
         lista_generos = crea_lista(archivo_generos) #Se crea una lista con los generos
@@ -111,8 +111,8 @@ def anadir_genero(gen_window,enter,leave):
     #FUENTE
     button_font = font.Font(size=13,family="Arial",weight="bold")
 
-    #FRAME
-    buttons_frame = Frame(main_frame,bg="#222831") #frame donde iran los botones
+    #FRAME DONDE IRÁN LOS BOTONES
+    buttons_frame = Frame(main_frame,bg="#222831")
 
     #CANCELAR
     btn_cancelar_frame = Frame(buttons_frame, bg="white", bd=1) #frame donde va el boton cancelar

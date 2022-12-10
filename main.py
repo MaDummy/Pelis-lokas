@@ -233,10 +233,10 @@ def main():
     def busqueda(event = None):
         global filtros_estado
         
-        #limpia resultados anteriores
+        #Limpia resultados anteriores
         limpia_resultados()
         
-        #modifica el estilo de la tabla de resultados
+        #Modifica el estilo de la tabla de resultados
         style.configure("Treeview", 
             font=("Calibri",14),
             background="#283039",
@@ -246,25 +246,25 @@ def main():
         
         style.configure("Treeview.Heading",borderwidth=0,font=("Calibri",16))
 
-        #activa el boton home
+        #Activa el boton home
         home_button["state"] = "active"
         home_button["cursor"] = "hand2"
 
-        #elimina boton para cambiar entre peliculas y generos
+        #Elimina boton para cambiar entre peliculas y generos
         lista_peliculas_btn.grid_remove()
         arbol_generos_btn.grid_remove()
 
-        #elimina el arbol de generos o tabla de peliculas
+        #Elimina el arbol de generos o tabla de peliculas
         peliculas_titulo.grid_remove()
         peliculas_frame.grid_remove()
         generos_titulo.grid_remove()
         generos_frame.grid_remove()
         
-        #resultados 
+        #Resultados 
         lista_resultados = []
         valoracion = combo_valoracion.get()
         genero = combo_genero.get()
-        nombre = search.get()
+        nombre = search.get().strip()
         
         if nombre == "Buscar pelicula":
             nombre = ''
@@ -361,31 +361,31 @@ def main():
             font=("Calibri",13)
         )
         
-        #desactiva el botón home
+        #Desactiva el botón home
         home_button["state"] = "disabled"
         home_button["cursor"] = "arrow"
 
-        #mustra el boton para cambiar a peliculas
+        #Muestra el boton para cambiar a peliculas
         lista_peliculas_btn.grid()
         
-        #muestra el arbol de generos
+        #Muestra el arbol de generos
         generos_titulo.grid()
         generos_frame.grid()
-        #elimina tabla de resultados
+        #Elimina tabla de resultados
         numero_resultados.grid_remove()
         resultados_frame.grid_remove()
-        #limpia los resultados
+        #Limpia los resultados
         limpia_resultados()
-        #limpia los filtros
+        #Limpia los filtros
         limpia_filtros()
-        #limpia el entry
+        #Limpia el entry
         cierra_filtros()
         search.delete(0,END)
         search.focus_set()
         root.focus_set()
     
     
-    #funciones de actualizacion (al añadir peliculas y añadir generos)
+    #Funciones de actualizacion (al añadir peliculas y añadir generos)
     def actualiza_generos():
         global generos
         
@@ -431,22 +431,22 @@ def main():
 
 
     #FUNCIONES EVENTO 'HOVER'
-    def enter(e):
-        e.widget['background'] = BTN_HOVER_COLOR
+    def enter(evento):
+        evento.widget['background'] = BTN_HOVER_COLOR
 
-    def leave(e):
-        e.widget['background'] = BTN_COLOR
+    def leave(evento):
+        evento.widget['background'] = BTN_COLOR
     
 
     #FUNCIONES EVENTO 'FOCUS'
-    def focus_in(e):
+    def focus_in(evento):
         search["fg"] = "white"
-        if e.widget.get() == "Buscar pelicula":
+        if evento.widget.get() == "Buscar pelicula":
             search.delete(0,END)
     
 
-    def focus_out(e):
-        if e.widget.get() == "":
+    def focus_out(evento):
+        if evento.widget.get() == "":
             search["fg"] = LIGHT_TXT_COLOR
             search.insert(END,"Buscar pelicula")
        

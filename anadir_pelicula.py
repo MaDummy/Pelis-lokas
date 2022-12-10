@@ -57,7 +57,7 @@ def anadir_pelicula(pel_window,enter,leave):
         return True
 
 
-    def anade_pelicula(event = None):
+    def anade_pelicula(event = None) -> None:
         '''VARIABLES GLOBALES'''
 
         global lista_peliculas

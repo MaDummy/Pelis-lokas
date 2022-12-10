@@ -26,8 +26,19 @@ root.configure(bg="#222831")
 
 
 #archivos
-archivo_generos = open("generos.csv","r+",encoding="utf-8") 
-archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8") 
+try:
+    archivo_generos = open("generos.csv","r+",encoding="utf-8") 
+    archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8") 
+except FileNotFoundError:
+    archivo_generos = open("generos.csv", "x",encoding="utf-8")
+    archivo_generos.close()
+    
+    archivo_peliculas = open("peliculas.csv", "x",encoding="utf-8")
+    archivo_peliculas.close()
+
+    archivo_generos = open("generos.csv","r+",encoding="utf-8") 
+    archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8")
+
 
 generos = crea_lista(archivo_generos)
 peliculas = crea_lista(archivo_peliculas)

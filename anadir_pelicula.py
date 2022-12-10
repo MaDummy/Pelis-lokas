@@ -67,7 +67,7 @@ def anadir_pelicula(pel_window,enter,leave):
 
         titulo = entry_titulo.get().strip().replace(',','‚')
         director = entry_director.get().strip().replace(',','‚')
-        genero = entry_genero.get().strip()
+        genero = entry_genero.get().strip().replace(',','‚')
         ano = entry_ano.get().strip()
         valoracion = entry_valoracion.get().strip()
 
@@ -86,6 +86,7 @@ def anadir_pelicula(pel_window,enter,leave):
             lista_peliculas.append(pelicula)
 
             archivo_peliculas.write(f'“{titulo.title()}”, “{director.title()}”, “{genero.capitalize()}”, {ano}, {valoracion}”\n')
+            archivo_peliculas.close()
             msg["text"] = "La película se ha ingresado con exito"
   
     #Interfaz Grafica

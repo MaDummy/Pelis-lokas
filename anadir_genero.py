@@ -3,15 +3,19 @@ import tkinter.font as font
 from crea_lista import crea_lista
 
 def anadir_genero(gen_window,enter,leave):
-    #archivo generos
-    archivo_generos = open("generos.csv","r+",encoding="utf-8")
-    lista_generos = crea_lista(archivo_generos) #Se crea una lista con los generos
-
     def subgenero():
         '''FUNCION QUE AÑADE SUBGENEROS'''
-        nonlocal archivo_generos
-        genero_padre = entry_padre.get().strip() #Se asigna una variable que toma el valor del género padre escrito.
-        genero_ingresado = entry_genero.get().strip() #Se asigna una variable que toma el valor del género ingresado escrito.
+        archivo_generos = open("generos.csv","r+",encoding="utf-8") #abre el archivo
+        lista_generos = crea_lista(archivo_generos) #Se crea una lista con los generos
+
+        genero_padre = entry_padre.get().strip().replace(',','‚') #Se asigna una variable que toma el valor del género padre escrito.
+        genero_ingresado = entry_genero.get().strip().replace(',','‚') #Se asigna una variable que toma el valor del género ingresado escrito.
+
+        if lista_generos == []:
+            archivo_generos.write(f'“{genero_ingresado.capitalize()}”, “General”\n')
+            msg["text"] = "Se ha ingresado con exito"
+            return
+            
 
         gp_existe = False
 
@@ -30,6 +34,7 @@ def anadir_genero(gen_window,enter,leave):
             if lista_generos.index(genero) == len(lista_generos)-1 and gp_existe: #Una vez ya haya revisado toda la lista de generos, si el genero ingresado
                 lista_generos.append([genero_ingresado, genero_padre])      #sigue sin existir, entonces lo ingresa a la lista de generos y al archivo csv.
                 archivo_generos.write(f'“{genero_ingresado.capitalize()}”, “{genero_padre.capitalize()}”\n')
+                archivo_generos.close()
                 
                 msg["text"] = "Se ha ingresado con exito"
                 break #Como a la lista de generos se le añade un indice más, revisará la lista en el nuevo índice. Para evitar esto, se pone un break.

@@ -57,7 +57,7 @@ def anadir_pelicula(pel_window,enter,leave):
         return True
 
 
-    def anade_pelicula():
+    def anade_pelicula(event = None):
         '''VARIABLES GLOBALES'''
 
         global lista_peliculas
@@ -218,3 +218,9 @@ def anadir_pelicula(pel_window,enter,leave):
     '''EVENTOS'''
     btn_anadir.bind("<Enter>",enter)
     btn_anadir.bind("<Leave>",leave)
+    
+    entry_titulo.bind("<Return>",anade_pelicula)
+    entry_director.bind("<Return>",anade_pelicula)
+    entry_ano.bind("<Return>",anade_pelicula)
+    entry_genero.bind("<Return>",anade_pelicula)
+    entry_valoracion.bind("<Return>",anade_pelicula)

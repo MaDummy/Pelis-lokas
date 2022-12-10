@@ -230,7 +230,7 @@ def main():
     
     
     #FUNCIÓN BÚSQUEDA DE PELÍCULAS
-    def busqueda(e = ""):
+    def busqueda(event = None):
         global filtros_estado
         
         #limpia resultados anteriores

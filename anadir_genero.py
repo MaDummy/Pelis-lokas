@@ -3,7 +3,7 @@ import tkinter.font as font
 from crea_lista import crea_lista
 
 def anadir_genero(gen_window,enter,leave):
-    def subgenero():
+    def subgenero(event = None):
         '''FUNCION QUE AÑADE SUBGENEROS'''
         archivo_generos = open("generos.csv","r+",encoding="utf-8") #abre el archivo
         lista_generos = crea_lista(archivo_generos) #Se crea una lista con los generos
@@ -134,3 +134,6 @@ def anadir_genero(gen_window,enter,leave):
     '''EVENTOS'''
     btn_anadir.bind("<Enter>",enter)
     btn_anadir.bind("<Leave>",leave)
+
+    entry_padre.bind("<Return>",subgenero)
+    entry_genero.bind("<Return>",subgenero)

@@ -17,7 +17,6 @@ def anadir_genero(gen_window,enter,leave):
 
         if genero_ingresado == '' or genero_padre == '': #Si algun dato es vacío, tira error.
             msg["text"] = "Falta algún tipo de dato. Ingrese nuevamente."
-            msg.place(relx=0.260)
             return
 
         for genero in lista_generos:
@@ -26,7 +25,6 @@ def anadir_genero(gen_window,enter,leave):
 
             if gp_existe and genero_ingresado.lower() == genero[0].lower() or genero_ingresado.lower() ==  genero[1].lower(): #Si el genero padre existe y el genero ingresado también, printea que ya existe.
                 msg["text"] = "El género ya existe."
-                msg.place(relx=0.415)
                 break
 
             if lista_generos.index(genero) == len(lista_generos)-1 and gp_existe: #Una vez ya haya revisado toda la lista de generos, si el genero ingresado
@@ -34,14 +32,10 @@ def anadir_genero(gen_window,enter,leave):
                 archivo_generos.write(f'“{genero_ingresado.capitalize()}”, “{genero_padre.capitalize()}”\n')
                 
                 msg["text"] = "Se ha ingresado con exito"
-                msg.place_forget()
-                msg.place(relx=0.385)
                 break #Como a la lista de generos se le añade un indice más, revisará la lista en el nuevo índice. Para evitar esto, se pone un break.
 
             if lista_generos.index(genero) == len(lista_generos)-1 and not gp_existe: #Si al revisar la lista de generos, el genero padre sigue sin existir, tira mensaje de error.         
                 msg["text"] = "El género padre no existe."
-                msg.place_forget()
-                msg.place(relx=0.385)
 
     '''---------------------INTERFAZ GRÁFICA---------------------'''
 
@@ -74,6 +68,7 @@ def anadir_genero(gen_window,enter,leave):
     '''MENSAJE'''
     msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
     msg["font"] = ("Calibri", 20)
+    msg.place(anchor=CENTER,relx=0.55,rely=0.05)
 
     #TEXTOS
     genero_padre_txt = Label(main_frame, text="Genero Padre", bg="#222831", fg="white")

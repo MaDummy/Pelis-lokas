@@ -27,7 +27,6 @@ def anadir_pelicula(pel_window,enter,leave):
 
 
     def valida_repeticion(titulo: str, director: str) -> bool:
-        print(titulo.lower())
         for pelicula in lista_peliculas: #Se valida si el titulo y el director están juntos en el archivo de películas.
             if titulo.lower() == pelicula[0].lower()  and director.lower() == pelicula[1].lower():
                 return True
@@ -36,33 +35,23 @@ def anadir_pelicula(pel_window,enter,leave):
 
     def valida_pelicula(titulo: str, director: str, genero: str, ano: str, valoracion: str) -> bool:
         if titulo == '' or director == '' or genero == '' or ano == '' or valoracion == '':
-            msg["text"] = "Falta algun tipo de dato. Intente nuevamente."            
-            msg.place_forget()
-            msg.place(relx=0.27)
+            msg["text"] = "Falta algun tipo de dato. Intente nuevamente."
             return False
         
         if not valida_ano(ano):
             msg["text"] = "No se pudo agregar la película, el año no es valido"
-            msg.place_forget()
-            msg.place(relx=0.25)
             return False
 
         if not valida_valoracion(valoracion):
             msg["text"] = "No se pudo agregar la pelicula, la valoración no es valida"
-            msg.place_forget()
-            msg.place(relx=0.25)
             return False
         
         if not valida_genero(genero):
             msg["text"] = "No se pudo agregar la pelicula, el genero no existe"
-            msg.place_forget()
-            msg.place(relx=0.25)
             return False
         
         if valida_repeticion(titulo, director):
             msg["text"] = "La película ya existe"
-            msg.place_forget()
-            msg.place(relx=0.4)
             return False
 
         return True
@@ -98,8 +87,6 @@ def anadir_pelicula(pel_window,enter,leave):
 
             archivo_peliculas.write(f'“{titulo.title()}”, “{director.title()}”, “{genero.capitalize()}”, {ano}, {valoracion}”\n')
             msg["text"] = "La película se ha ingresado con exito"
-            msg.place_forget()
-            msg.place(relx=0.4)
   
     #Interfaz Grafica
 
@@ -131,7 +118,8 @@ def anadir_pelicula(pel_window,enter,leave):
     '''MENSAJE'''
     msg = Label(main_frame,text="",bg="#222831",fg="white") #Mensaje de error
     msg["font"] = ("Calibri", 20)
-    
+    msg.place(anchor=CENTER,relx=0.55,rely=0.03)
+
 
     '''TEXTOS'''
     titulo_txt = Label(main_frame, text="Titulo", bg="#222831", fg="white")

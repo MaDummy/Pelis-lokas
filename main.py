@@ -5,7 +5,9 @@ from crea_lista import crea_lista
 from anadir_genero import anadir_genero
 from anadir_pelicula import anadir_pelicula
 
+'''ROOT'''
 root = Tk()
+root.title("Películas")
 
 '''PARA CENTRAR LA VENTANA'''
 largo = root.winfo_screenwidth()
@@ -28,15 +30,18 @@ root.configure(bg="#222831")
 #archivos
 try:
     archivo_generos = open("generos.csv","r+",encoding="utf-8") 
-    archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8") 
 except FileNotFoundError:
     archivo_generos = open("generos.csv", "x",encoding="utf-8")
     archivo_generos.close()
     
+    archivo_generos = open("generos.csv","r+",encoding="utf-8") 
+    
+try:
+    archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8") 
+except FileNotFoundError:
     archivo_peliculas = open("peliculas.csv", "x",encoding="utf-8")
     archivo_peliculas.close()
 
-    archivo_generos = open("generos.csv","r+",encoding="utf-8") 
     archivo_peliculas = open("peliculas.csv","r+",encoding="utf-8")
 
 
@@ -266,7 +271,7 @@ def main():
         genero = combo_genero.get()
         nombre = search.get().strip()
         
-        if nombre == "Buscar pelicula":
+        if nombre == "Buscar película":
             nombre = ''
 
         if genero == "<Cualquiera>" and valoracion != "<Cualquiera>": #Caso en el que se busque por valoración y nombre
@@ -325,6 +330,9 @@ def main():
 
         #Numero resultados
         numero_resultados["text"] = f"Se han encontrado {len(lista_resultados)} resultados"
+        if len(lista_resultados) == 1:
+            numero_resultados["text"] = "Se ha encontrado 1 resultado"
+
         
         #Inserta los resultados en la tabla
         for resultado in lista_resultados:
@@ -441,14 +449,14 @@ def main():
     #FUNCIONES EVENTO 'FOCUS'
     def focus_in(evento):
         search["fg"] = "white"
-        if evento.widget.get() == "Buscar pelicula":
+        if evento.widget.get() == "Buscar película":
             search.delete(0,END)
     
 
     def focus_out(evento):
         if evento.widget.get() == "":
             search["fg"] = LIGHT_TXT_COLOR
-            search.insert(END,"Buscar pelicula")
+            search.insert(END,"Buscar película")
        
     
     '''FRAME PRINCIPAL'''
@@ -469,7 +477,7 @@ def main():
     #ENTRY
     search = Entry(search_frame,bg=LIGHT_COLOR,bd=0,fg=LIGHT_TXT_COLOR)
     search["font"] = ("Calibri",13)
-    search.insert(END,"Buscar pelicula")
+    search.insert(END,"Buscar película")
     #BOTON
     search_button = Button(search_frame,image=search_icon,background=LIGHT_COLOR,border=0,command=busqueda,activebackground=LIGHT_COLOR,cursor="hand2")
     
@@ -486,11 +494,11 @@ def main():
     #AÑADIR GENERO Y PELICULA
     button_font = font.Font(size=12,family="Arial",weight="bold")
 
-    button_pel = Button(app_frame, text="Añadir pelicula",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2",command=actualiza_peliculas)
+    button_pel = Button(app_frame, text="Añadir película",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR, activeforeground="white",cursor="hand2",command=actualiza_peliculas)
     button_pel["font"] = button_font
     button_pel.grid(row=2,column=3,pady=(80,60),sticky="we")
     
-    button_gen = Button(app_frame, text="Añadir genero",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR,activeforeground="white",cursor="hand2",command=actualiza_generos)
+    button_gen = Button(app_frame, text="Añadir género",bg=BTN_COLOR,fg=TXT_COLOR,pady=12,padx=60,border=0,activebackground=BTN_ACTIVE_COLOR,activeforeground="white",cursor="hand2",command=actualiza_generos)
     button_gen["font"] = button_font
     button_gen.grid(row=2,column=2,sticky="we",padx=30,pady=(80,60))
     
@@ -503,10 +511,10 @@ def main():
     filtros_frame = Frame(app_frame,bg=LIGHT_COLOR)
     filtros_frame.columnconfigure(index=1, weight=1)
     
-    genero_txt = Label(filtros_frame,text="Genero",fg="white",bg=LIGHT_COLOR)        
+    genero_txt = Label(filtros_frame,text="Género",fg="white",bg=LIGHT_COLOR)        
     genero_txt["font"] = ("Calibri",15)
 
-    valoracion_txt = Label(filtros_frame,text="Valoracion",fg="white",bg=LIGHT_COLOR)
+    valoracion_txt = Label(filtros_frame,text="Valoración",fg="white",bg=LIGHT_COLOR)
     valoracion_txt["font"] = ("Calibri",15)
 
     #COMBOBOX GÉNERO
@@ -533,7 +541,7 @@ def main():
     arbol_generos_btn = Button(app_frame,image=genre_icon,bg=BG_COLOR,bd=0,activebackground=BG_COLOR,cursor="hand2",command=despliega_generos)
     
     #TÍTULO Y CONTENEDOR
-    generos_titulo = Label(app_frame,text="Generos",bg=BG_COLOR,fg=TXT_COLOR)
+    generos_titulo = Label(app_frame,text="Géneros",bg=BG_COLOR,fg=TXT_COLOR)
     generos_titulo["font"] = ("Calibri", 32)
     
     generos_frame = Frame(app_frame,bg=LIGHT_COLOR)
@@ -562,7 +570,7 @@ def main():
     lista_peliculas_btn.grid(row=3,column=3,sticky="e",pady=(0,30))
     
     #FRAME Y TEXTO
-    peliculas_titulo = Label(app_frame,text="Peliculas",bg=BG_COLOR,fg=TXT_COLOR,font=("Calibri",32))
+    peliculas_titulo = Label(app_frame,text="Películas",bg=BG_COLOR,fg=TXT_COLOR,font=("Calibri",32))
     peliculas_frame = Frame(app_frame,bg=BG_COLOR)
     peliculas_frame.columnconfigure(index=0,weight=1)
     peliculas_frame.rowconfigure(index=0,weight=1)
@@ -583,8 +591,8 @@ def main():
     tabla_peliculas.heading("Nombre", text="Nombre",anchor="w")
     tabla_peliculas.heading("Director", text="Director",anchor="w")
     tabla_peliculas.heading("Año", text="Año",anchor="center")
-    tabla_peliculas.heading("Genero", text="Genero",anchor="w")
-    tabla_peliculas.heading("Valoracion", text="Valoracion",anchor="center")
+    tabla_peliculas.heading("Genero", text="Género",anchor="w")
+    tabla_peliculas.heading("Valoracion", text="Valoración",anchor="center")
     
     llena_peliculas() #Llena la tabla de peliculas con las peliculas
     
@@ -619,8 +627,8 @@ def main():
     resultados.heading("Nombre", text="Nombre",anchor="w")
     resultados.heading("Director", text="Director",anchor="w")
     resultados.heading("Año", text="Año",anchor="center")
-    resultados.heading("Genero", text="Genero",anchor="w")
-    resultados.heading("Valoracion", text="Valoracion",anchor="center")
+    resultados.heading("Genero", text="Género",anchor="w")
+    resultados.heading("Valoracion", text="Valoración",anchor="center")
 
     #SCROLLBAR
     resultados_scrollbar = AutoScrollbar(resultados,command=resultados.yview,orient="vertical")

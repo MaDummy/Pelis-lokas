@@ -35,7 +35,7 @@ def anadir_pelicula(pel_window,enter,leave):
 
     def valida_pelicula(titulo: str, director: str, genero: str, ano: str, valoracion: str) -> bool:
         if titulo == '' or director == '' or genero == '' or ano == '' or valoracion == '':
-            msg["text"] = "Falta algun tipo de dato. Intente nuevamente."
+            msg["text"] = "Falta algún tipo de dato. Intente nuevamente."
             return False
         
         if not valida_ano(ano):
@@ -43,11 +43,11 @@ def anadir_pelicula(pel_window,enter,leave):
             return False
 
         if not valida_valoracion(valoracion):
-            msg["text"] = "No se pudo agregar la pelicula, la valoración no es valida"
+            msg["text"] = "No se pudo agregar la película, la valoración no es valida"
             return False
         
         if not valida_genero(genero):
-            msg["text"] = "No se pudo agregar la pelicula, el genero no existe"
+            msg["text"] = "No se pudo agregar la película, el género no existe"
             return False
         
         if valida_repeticion(titulo, director):
@@ -104,6 +104,8 @@ def anadir_pelicula(pel_window,enter,leave):
         800, 
         borde_x, 
         borde_y))
+    
+    pel_window.title("Añadir Película")
     '''PARA CENTRAR LA VENTANA'''
 
     pel_window.configure(bg ="#222831") #El color del fondo
@@ -132,10 +134,10 @@ def anadir_pelicula(pel_window,enter,leave):
     ano_txt = Label(main_frame, text="Año", bg="#222831", fg="white")
     ano_txt["font"] = ("Calibri",20)
 
-    genero_txt = Label(main_frame, text="Genero", bg="#222831", fg="white")
+    genero_txt = Label(main_frame, text="Género", bg="#222831", fg="white")
     genero_txt["font"] = ("Calibri",20)
 
-    valoracion_txt = Label(main_frame, text="Valoracion", bg="#222831", fg="white")
+    valoracion_txt = Label(main_frame, text="Valoración", bg="#222831", fg="white")
     valoracion_txt["font"] = ("Calibri",20)
 
 
@@ -205,7 +207,7 @@ def anadir_pelicula(pel_window,enter,leave):
     btn_cancelar["font"] = button_font
 
     #AÑADIR PELICULA
-    btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Pelicula", fg="white", padx=75, bd=0, pady=15,activebackground="#7c242c",activeforeground="white",cursor="hand2",command=anade_pelicula)
+    btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Película", fg="white", padx=75, bd=0, pady=15,activebackground="#7c242c",activeforeground="white",cursor="hand2",command=anade_pelicula)
     btn_anadir["font"] = button_font
 
     #POSICIONAMIENTO

@@ -11,18 +11,21 @@ def anadir_genero(gen_window,enter,leave) -> None:
         genero_padre = entry_padre.get().strip().replace(',','‚') #Se asigna una variable que toma el valor del género padre escrito.
         genero_ingresado = entry_genero.get().strip().replace(',','‚') #Se asigna una variable que toma el valor del género ingresado escrito.
 
-        if lista_generos == []:
-            archivo_generos.write(f'“{genero_ingresado.capitalize()}”, “General”\n')
-            msg["text"] = "Se ha ingresado con exito"
-            return
-            
-
         gp_existe = False
 
         if genero_ingresado == '' or genero_padre == '': #Si algun dato es vacío, tira error.
             msg["text"] = "Falta algún tipo de dato. Ingrese nuevamente."
             return
 
+        if lista_generos == [] and genero_padre.lower() != "general":
+            msg["text"] = "El género padre no existe."
+            return
+        
+        if lista_generos == []:
+            archivo_generos.write(f'“{genero_ingresado.capitalize()}”, “General”\n')
+            msg["text"] = "Se ha ingresado con exito"
+            return
+        
         for genero in lista_generos:
             if genero_padre.lower() == genero[0].lower() or genero_padre.lower() == genero[1].lower(): #Revisa la primera vez que el genero padre aparezca dentro de los generos.
                 gp_existe = True
@@ -58,7 +61,8 @@ def anadir_genero(gen_window,enter,leave) -> None:
         550, 
         borde_x, 
         borde_y))
-        
+
+    gen_window.title("Añadir Género")    
     '''PARA CENTRAR LA VENTANA'''
 
     gen_window.configure(bg ="#222831") #El color del fondo
@@ -76,10 +80,10 @@ def anadir_genero(gen_window,enter,leave) -> None:
     msg.place(anchor=CENTER,relx=0.55,rely=0.05)
 
     #TEXTOS
-    genero_padre_txt = Label(main_frame, text="Genero Padre", bg="#222831", fg="white")
+    genero_padre_txt = Label(main_frame, text="Género Padre", bg="#222831", fg="white")
     genero_padre_txt["font"] = ("Calibri",20)
 
-    genero_txt = Label(main_frame, text="Genero", bg="#222831", fg="white")
+    genero_txt = Label(main_frame, text="Género", bg="#222831", fg="white")
     genero_txt["font"] = ("Calibri",20)
 
     '''ENTRYS'''
@@ -120,7 +124,7 @@ def anadir_genero(gen_window,enter,leave) -> None:
     btn_cancelar["font"] = button_font
 
     #AÑADIR
-    btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgenero", fg="white", padx=70, bd=0, pady=15, command=subgenero,activebackground="#7c242c",activeforeground="white",cursor="hand2")
+    btn_anadir = Button(buttons_frame, bg="#D72323", text="Añadir Subgénero", fg="white", padx=70, bd=0, pady=15, command=subgenero,activebackground="#7c242c",activeforeground="white",cursor="hand2")
     btn_anadir["font"] = button_font
 
     #POSICIONAMIENTO DE BOTONES
